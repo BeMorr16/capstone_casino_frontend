@@ -1,40 +1,117 @@
 import { useState } from 'react';
 import './LoginRegister.css';
+import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export default function LoginRegister() {
   const [signIn, setSignIn] = useState(true);
+  const [signInFormData, setSignInFormData] = useState({
+    username: "",
+    password: ""
+  });
+  const [signUpFormData, setSignUpFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    mode: null
+  });
+  const navigate = useNavigate();
+  const registerMutation = useMutation({
+    mutationFn: registerUser,
+    onSuccess: () => {
+      navigate('/warehouse')
+    }
+  })
+  const loginMutation = useMutation({
+    mutationFn: loginUser,
+    onSuccess: () => {
+      navigate('/warehouse')
+    }
+  })
+
+  async function registerUser(formData) {
+    try {
+      const response = await axios.post("http://localhost:8080/user/register", formData);
+      if (response.data.token) {
+        window.localStorage.setItem("token", response.data.token);
+
+      }
+      return response
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async function loginUser(formData) {
+    try {
+      const response = await axios.post("http://localhost:8080/user/login", formData);
+      if (response.data.token) {
+        window.localStorage.setItem("token", response.data.token);
+      }
+      return response;
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  function handleSignUpFormChange(e) {
+    const { name, value } = e.target;
+    setSignUpFormData((prev) => ({
+      ...prev,
+      [name]: name === "mode" ? parseInt(value) : value
+    }));
+  }
+  
+  function handleSignInFormChange(e) {
+    const { name, value } = e.target;
+    setSignInFormData((prev) => ({ ...prev, [name]: value }));
+  }
+
+  function handleSignUpSubmit(e) {
+    e.preventDefault();
+    registerMutation.mutate(signUpFormData);
+  }
+
+  function handleSignInSubmit(e) {
+    e.preventDefault();
+    loginMutation.mutate(signInFormData);
+  }
 
   const toggle = () => setSignIn(!signIn);
 
   return (
     <div className="container">
       <div className={`sign-up-container ${!signIn ? 'active' : ''}`}>
-        <form className="form">
+        <form className="form" onSubmit={handleSignUpSubmit}>
           <h1>Create Account</h1>
-          <input type='text' placeholder='Username' className="input" />
-          <input type='email' placeholder='Email' className="input" />
-          <input type='password' placeholder='Password' className="input" />
+          <input type='text' placeholder='Username' name='username' className="input" onChange={handleSignUpFormChange} required/>
+          <input type='email' placeholder='Email' name='email' className="input" onChange={handleSignUpFormChange} required/>
+          <input type='password' placeholder='Password' name='password' className="input" onChange={handleSignUpFormChange} required/>
           <div>
-        <input type="radio" id="mode1" name="mode" value={1} />
+        <input type="radio" id="mode1" name="mode" value={1} onChange={handleSignUpFormChange}/>
         <label htmlFor="mode1">Easy</label>
 
-        <input type="radio" id="mode2" name="mode" value={2} />
+        <input type="radio" id="mode2" name="mode" value={2} onChange={handleSignUpFormChange}/>
         <label htmlFor="mode2">Medium</label>
 
-        <input type="radio" id="mode3" name="mode" value={3} />
-        <label htmlFor="mode3">Hard</label>
+        <input type="radio" id="mode3" name="mode" value={3} onChange={handleSignUpFormChange}/>
+            <label htmlFor="mode3">Hard</label>
+            
           </div>
-          <button type='button' className="button">Sign Up</button>
+        <input type="radio" id="mode4" name="mode" value={4} onChange={handleSignUpFormChange}/>
+        <label htmlFor="mode4">Impossible</label>
+          <button className="button" disabled={signUpFormData.mode === null}>Sign Up</button>
         </form>
       </div>
 
       <div className={`sign-in-container ${signIn ? 'active' : ''}`}>
-        <form className="form">
+        <form className="form" onSubmit={handleSignInSubmit}>
           <h1>Sign in</h1>
-          <input type='text' placeholder='Username' className="input" />
-          <input type='password' placeholder='Password' className="input" />
+          <input type='text' placeholder='Username' name='username' className="input" onChange={handleSignInFormChange} required/>
+          <input type='password' placeholder='Password' name='password' className="input" onChange={handleSignInFormChange} required/>
           {/* <a href='#' className="anchor">Forgot your password?</a> */}
-          <button type='button' className="button">Sign In</button>
+          <button className="button">Sign In</button>
         </form>
       </div>
 
