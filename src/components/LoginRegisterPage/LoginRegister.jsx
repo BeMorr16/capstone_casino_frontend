@@ -32,7 +32,7 @@ export default function LoginRegister() {
 
   async function registerUser(formData) {
     try {
-      const response = await axios.post("http://localhost:8080/user/register", formData);
+      const response = await axios.post("https://capstone-casino-backend.onrender.com/user/register", formData);
       if (response.data.token) {
         window.localStorage.setItem("token", response.data.token);
 
@@ -45,7 +45,7 @@ export default function LoginRegister() {
 
   async function loginUser(formData) {
     try {
-      const response = await axios.post("http://localhost:8080/user/login", formData);
+      const response = await axios.post("https://capstone-casino-backend.onrender.com/user/login", formData);
       if (response.data.token) {
         window.localStorage.setItem("token", response.data.token);
       }
@@ -110,7 +110,6 @@ export default function LoginRegister() {
           <h1>Sign in</h1>
           <input type='text' placeholder='Username' name='username' className="input" onChange={handleSignInFormChange} required/>
           <input type='password' placeholder='Password' name='password' className="input" onChange={handleSignInFormChange} required/>
-          {/* <a href='#' className="anchor">Forgot your password?</a> */}
           <button className="button">Sign In</button>
         </form>
       </div>

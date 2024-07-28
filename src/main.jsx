@@ -15,8 +15,7 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Warehouse from "./components/Warehouse/Warehouse.jsx";
 
 
-
-const Blackjack = lazy(() => import('./components/Blackjack/Blackjack.jsx'));
+const Blackjack = lazy(() => import('./components/Blackjack/BJComponents/Blackjack.jsx'));
 
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
