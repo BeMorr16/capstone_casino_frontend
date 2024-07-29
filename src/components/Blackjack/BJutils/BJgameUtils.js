@@ -1,39 +1,35 @@
 import cardCount from "./cardCount";
 
 
-export const handleHit = (randomizedDecks, setPlayersCards, setIsPlayerBusted, setIsDealersTurn, setRandomizedDecks) => {
+export function handleHit(randomizedDecks, setPlayersCards, setIsPlayerBusted, setIsDealersTurn, setRandomizedDecks) {
     const drawnUserCard = randomizedDecks.slice(0, 1);
     if (!Array.isArray(drawnUserCard) || drawnUserCard.length === 0) {
-        console.error('No cards drawn');
         return;
     }
     setPlayersCards((prev) => {
       const newCards = [...prev, ...drawnUserCard];
         const newCount = cardCount(newCards);
-        console.log('New Cards:', newCards); // Debugging output
-        console.log('New Count:', newCount); 
       if (newCount > 21) {
         setIsPlayerBusted(true);
         setIsDealersTurn(true);
       }
-        console.log(newCards)
       return newCards;
     });
     setRandomizedDecks(randomizedDecks.slice(1));
-  };
+  }
   
-  export const handleStand = (setIsDealersTurn) => {
+export function handleStand (setIsDealersTurn){
       setIsDealersTurn(true);
-  };
+  }
   
-  export const handleDouble = (chipCount, lockedBet, setChipCount, handleHit, setIsDealersTurn, setLockedBet, randomizedDecks, setPlayersCards, setIsPlayerBusted, setRandomizedDecks) => {
+  export function handleDouble(chipCount, lockedBet, setChipCount, handleHit, setIsDealersTurn, setLockedBet, randomizedDecks, setPlayersCards, setIsPlayerBusted, setRandomizedDecks){
     setChipCount((prev) => prev - lockedBet);
     setLockedBet(lockedBet * 2);
     handleHit(randomizedDecks, setPlayersCards, setIsPlayerBusted, setIsDealersTurn, setRandomizedDecks)
     setIsDealersTurn(true);
-  };
+  }
   
-  export const handleSubmit = (e, setIsDealersTurn, setIsHandComplete, setLockedBet, betAmount, setChipCount, randomizedDecks, setPlayersCards, setDealersCards, setRandomizedDecks, setBetAmount, setWinner, lockedBet) => {
+  export function handleSubmit(e, setIsDealersTurn, setIsHandComplete, setLockedBet, betAmount, setChipCount, randomizedDecks, setPlayersCards, setDealersCards, setRandomizedDecks, setBetAmount, setWinner, lockedBet) {
     e.preventDefault();
     setIsDealersTurn(false);
     setIsHandComplete(false);
@@ -58,5 +54,5 @@ export const handleHit = (randomizedDecks, setPlayersCards, setIsPlayerBusted, s
       }
       setIsHandComplete(true);
     }
-  };
+  }
   

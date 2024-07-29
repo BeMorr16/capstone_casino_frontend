@@ -2,7 +2,7 @@ import { useState } from 'react';
 import './LoginRegister.css';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { loginUser, registerUser } from '../Utils/APIRequests';
 
 export default function LoginRegister() {
   const [signIn, setSignIn] = useState(true);
@@ -29,31 +29,6 @@ export default function LoginRegister() {
       navigate('/warehouse')
     }
   })
-
-  async function registerUser(formData) {
-    try {
-      const response = await axios.post("https://capstone-casino-backend.onrender.com/user/register", formData);
-      if (response.data.token) {
-        window.localStorage.setItem("token", response.data.token);
-
-      }
-      return response
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  async function loginUser(formData) {
-    try {
-      const response = await axios.post("https://capstone-casino-backend.onrender.com/user/login", formData);
-      if (response.data.token) {
-        window.localStorage.setItem("token", response.data.token);
-      }
-      return response;
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
   function handleSignUpFormChange(e) {
     const { name, value } = e.target;

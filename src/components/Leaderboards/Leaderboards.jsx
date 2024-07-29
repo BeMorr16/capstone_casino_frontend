@@ -1,26 +1,7 @@
 // import React from 'react'
 
 import { useQueries } from "@tanstack/react-query";
-import axios from "axios";
-
-async function betLeaderboardRequest() {
-  const { data } = await axios.get(
-    "https://capstone-casino-backend.onrender.com/leaderboard/transaction"
-  );
-  return data;
-}
-async function recordLeaderboardRequest() {
-  const { data } = await axios.get(
-    "https://capstone-casino-backend.onrender.com/leaderboard/user/record"
-  );
-  return data;
-}
-async function moneyLeaderboardRequest() {
-  const { data } = await axios.get(
-    "https://capstone-casino-backend.onrender.com/leaderboard/user"
-  );
-  return data;
-}
+import { betLeaderboardRequest, moneyLeaderboardRequest, recordLeaderboardRequest } from "../Utils/APIRequests";
 
 export default function Leaderboards() {
   const queries = [
