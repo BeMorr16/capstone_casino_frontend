@@ -1,8 +1,10 @@
 import axios from "axios";
+import useUserState from "../../store/store";
+
 
 export async function addTransaction(transaction) {
   try {
-    const token = window.localStorage.getItem("token");
+    const token = window.sessionStorage.getItem("token");
     const { data } = await axios.post(
       "https://capstone-casino-backend.onrender.com/transaction/add",
       transaction,
@@ -20,14 +22,16 @@ export async function addTransaction(transaction) {
 
 export async function registerUser(formData) {
   try {
-    const response = await axios.post(
+    const {data} = await axios.post(
       "https://capstone-casino-backend.onrender.com/user/register",
       formData
     );
-    if (response.data.token) {
-      window.localStorage.setItem("token", response.data.token);
+    if (data.token) {
+        window.sessionStorage.setItem("token", data.token);
+        const { id, user_money } = data;
+        useUserState.getState().setUser(id, user_money);
     }
-    return response;
+    return data;
   } catch (error) {
     console.log(error);
   }
@@ -35,14 +39,16 @@ export async function registerUser(formData) {
 
 export async function loginUser(formData) {
   try {
-    const response = await axios.post(
-      "https://capstone-casino-backend.onrender.com/user/login",
-      formData
-    );
-    if (response.data.token) {
-      window.localStorage.setItem("token", response.data.token);
+      const { data } = await axios.post(
+          "https://capstone-casino-backend.onrender.com/user/login",
+          formData
+      );
+    if (data.token) {
+        window.sessionStorage.setItem("token", data.token);
+        const { id, user_money } = data;
+        useUserState.getState().setUser(id, user_money);
     }
-    return response;
+    return data;
   } catch (error) {
     console.log(error);
   }

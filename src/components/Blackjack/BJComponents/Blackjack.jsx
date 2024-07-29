@@ -1,7 +1,7 @@
 import { useEffect, useCallback, useState } from "react";
 import "./BJ.css";
 import BJButton from "./BJButton";
-import useStore from "../BJstore/store";
+import useStore from "../BJstore/BJstore";
 import { handleDouble, handleHit, handleStand, handleSubmit } from "../BJutils/BJgameUtils";
 
 export default function Blackjack() {
