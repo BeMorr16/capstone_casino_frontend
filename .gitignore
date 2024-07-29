@@ -6,18 +6,37 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+<<<<<<< HEAD
+=======
+
+>>>>>>> b8194ddfdeed311c78e1ad41b516474372adb823
 node_modules
 dist
 dist-ssr
 *.local
+<<<<<<< HEAD
+=======
+
+>>>>>>> b8194ddfdeed311c78e1ad41b516474372adb823
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
 .DS_Store
 *.suo
-.ntvs
+<<<<<<< HEAD
+*.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
 package-lock.json
+=======
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+package-lock.json
+
+>>>>>>> b8194ddfdeed311c78e1ad41b516474372adb823
