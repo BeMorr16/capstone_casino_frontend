@@ -7,7 +7,6 @@ const initialDecks = getDecks();
 
 const useStore = create((set) => ({
   randomizedDecks: initialDecks,
-  chipCount: 0,
   betAmount: 0,
   lockedBet: 0,
   previousBet: 0,
@@ -21,7 +20,6 @@ const useStore = create((set) => ({
   isHandComplete: true,
   winner: "",
   setRandomizedDecks: (updateFn) => set((state) => ({ randomizedDecks: updateFn(state.randomizedDecks) })),
-  setChipCount: (updateFn) => set((state) => ({ chipCount: updateFn(state.chipCount) })),
     setBetAmount: (updateFn) => set((state) => {
         const amount = updateFn(state.betAmount);
         return {

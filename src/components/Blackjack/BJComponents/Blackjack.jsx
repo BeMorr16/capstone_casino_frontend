@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import "./BJ.css";
 import BJButton from "./BJButton";
 import useStore from "../BJstore/BJstore";
@@ -7,11 +7,11 @@ import { useMutation } from "@tanstack/react-query";
 import { addTransaction } from "../../Utils/APIRequests";
 import cardCount from "../BJutils/cardCount";
 import useUserState from "../../../store/store";
+import { useNavigate } from "react-router-dom";
 
 export default function Blackjack() {
     const {
         randomizedDecks,
-        chipCount,
         betAmount,
         lockedBet,
         previousBet,
@@ -25,7 +25,6 @@ export default function Blackjack() {
         isHandComplete,
         winner,
         setRandomizedDecks,
-        setChipCount,
         setBetAmount,
         setLockedBet,
         setPreviousBet,
@@ -40,7 +39,6 @@ export default function Blackjack() {
         reshuffleDecks
     } = useStore((state) => ({
         randomizedDecks: state.randomizedDecks,
-        chipCount: state.chipCount,
         betAmount: state.betAmount,
         lockedBet: state.lockedBet,
         previousBet: state.previousBet,
@@ -54,7 +52,6 @@ export default function Blackjack() {
         isHandComplete: state.isHandComplete,
         winner: state.winner,
         setRandomizedDecks: state.setRandomizedDecks,
-        setChipCount: state.setChipCount,
         setBetAmount: state.setBetAmount,
         setLockedBet: state.setLockedBet,
         setPreviousBet: state.setPreviousBet,
@@ -78,19 +75,20 @@ export default function Blackjack() {
     const transactionMutation = useMutation({
         mutationFn: addTransaction
     })
-
-
+    const navigate = useNavigate();
     const { tableChips, isLoggedIn, userMoney, adjustTableChips } = useUserState();
+    const [chipCount, setChipCount] = useState(() => {
+        if (isLoggedIn) {
+          if (tableChips > 0) {
+            return tableChips;
+          } else if (tableChips === 0) {
+            navigate('/casino');
+            return 0;
+          }
+        }
+        return 1000;
+      });
 
-
-
-    useEffect(() => {
-    if (isLoggedIn) {
-        setChipCount(() => useUserState.getState().tableChips || 0);
-    } else {
-        setChipCount(() => 1000);
-    }
-    }, [setChipCount, isLoggedIn])
     
 
     console.log(userMoney, tableChips)
@@ -131,22 +129,26 @@ function handleDealersTurn() {
         const dealerCountToCompare = dealerCount > dealerCountRef.current ? dealerCount : dealerCountRef.current;
         if (playerCardsRef.current.length === 2 && playerCountRef.current === 21) {
             setWinner(`Player wins ${lockedBet * 2.5} with Blackjack!`)
+            adjustTableChips(lockedBet * 1.5)
         } else if (isPlayerBusted || playerCountToCompare > 21) {
             setWinner("Busted! Dealer wins");
             sendTransaction(false, lockedBet, transactionMutation)
-            adjustTableChips((-lockedBet))
+            adjustTableChips(-lockedBet)
         } else if (dealerCountToCompare > 21) {
             setWinner(`Player wins ${lockedBet * 2}!`);
             setChipCount((prev) => prev + lockedBet * 2);
             sendTransaction(true, lockedBet, transactionMutation)
+            adjustTableChips(lockedBet)
         } else if (dealerCountToCompare >= 17) {
             if (playerCountToCompare > dealerCountToCompare) {
                 setWinner(`Player wins ${lockedBet * 2}!`);
                 setChipCount((prev) => prev + lockedBet * 2);
                 sendTransaction(true, lockedBet, transactionMutation)
+                adjustTableChips(lockedBet)
             } else if (playerCountToCompare < dealerCountToCompare) {
                 setWinner("Dealer wins!");
                 sendTransaction(false, lockedBet, transactionMutation)
+                adjustTableChips(-lockedBet)
             } else if (playerCountToCompare === dealerCountToCompare) {
                 setWinner("Push");
                 setChipCount((prev) => prev + lockedBet);
