@@ -1,5 +1,4 @@
 import { create } from "zustand";
-
 const useUserState = create((set) => ({
     id: "",
     userMoney: 0,
@@ -16,5 +15,4 @@ const useUserState = create((set) => ({
         tableChips: 0
     })
 }))
-
 export default useUserState;
