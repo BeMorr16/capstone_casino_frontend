@@ -1,0 +1,111 @@
+.board-container {
+  position: relative;
+  width: 50rem; /* Adjust to your needs */
+  height: 100vh; /* Adjust to your needs */
+  background-image: url("../assets/Board.png"); /* Path to your board image */
+  background-size: contain; /* Ensure the image fits without stretching */
+  background-position: center top; /* Adjust based on your needs */
+  background-repeat: no-repeat; /* No repeat */
+}
+
+.outer-grid {
+  display: grid;
+  grid-template-columns: 55px repeat(26, 26.9px) 55px; /* Zero cell + 26 columns for bets + extra column */
+  grid-template-rows: auto auto; /* Top row, middle row, bottom row */
+  /* gap: 1px; */
+  width: 50rem; /* Calculate the width based on cell sizes */
+  position: absolute; /* Position the grid absolutely within the container */
+  top: 1.2rem; /* Adjust based on your needs */
+  left: 50%;
+  transform: translateX(-50%); /* Center the grid horizontally */
+}
+
+.top-row {
+  display: grid;
+  grid-template-columns: 55px repeat(26, 26.9px) 55px; /* Zero cell + 26 columns for bets + extra column */
+  gap: 1px;
+  grid-column: 1 / -1; /* Span all columns */
+  grid-row: 1; /* First row */
+  position: relative; /* Ensure positioning within the outer grid */
+}
+
+.middle-column {
+  display: grid;
+  grid-template-columns: repeat(26, 26.9px); /* 26 columns */
+  grid-template-rows: repeat(6, 34px); /* 6 rows */
+  gap: 1px;
+  grid-column: 2 / span 26; /* Middle columns */
+  grid-row: 2; /* Second row */
+  position: relative; /* Ensure positioning within the top row */
+}
+
+.bottom-row {
+  display: grid;
+  grid-template-rows: 2.2rem 4rem; /* 2 rows: one for dozens, one for other bets */
+  gap: 0px;
+  left: 0.95rem;
+  width: 41.85rem;
+  grid-column: 2 / span 26; /* Middle columns */
+  grid-row: 3; /* Third row */
+  position: relative; /* Ensure positioning within the outer grid */
+}
+
+.bottom-row-top {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 columns for top, 6 for bottom */
+  gap: 1px;
+}
+
+.bottom-row-bottom {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* 3 columns for top, 6 for bottom */
+  gap: 1px;
+}
+
+.cell,
+.bet-cell {
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* border: 1px solid #000; */
+  box-sizing: border-box;
+  background-color: transparent; /* Transparent background */
+  position: relative; /* Ensure absolute positioning of chips */
+}
+
+.zero-cell {
+  grid-column: 1; /* First column */
+  grid-row: 1 / span 3; /* Span three rows */
+  background-color: transparent;
+  width: 3.5rem;
+  height: 11rem; /* 6 rows of 34px height + 2 gaps of 1px */
+}
+
+.number,
+.split,
+.corner {
+  width: 1.8rem;
+  height: 2.2rem;
+}
+
+.bet-cell {
+  background-color:transparent;
+  text-align: center;
+}
+
+.chip {
+  background-color: blue;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute; /* Absolute positioning to avoid changing cell size */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Center the chip */
+}

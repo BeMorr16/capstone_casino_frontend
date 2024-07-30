@@ -1,0 +1,18 @@
+/* Styles for ChipSelector Component */
+
+.chips-selector {
+  margin-bottom: 20px;
+}
+
+.chip-button {
+  margin: 0 10px;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.chip-button.selected {
+  border: 2px solid #000;
+  background-color: #f0f0f0;
+}
