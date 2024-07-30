@@ -1,21 +1,24 @@
 import React from "react";
-import Slots from "../Slots/Slots";
 import { useState } from "react";
+import Slots from "../Slots/Slots";
 import coinSound from "../assets/sounds/coin.mp3";
 import loseSound from "../assets/sounds/lose.mp3";
 import spinSound from "../assets/sounds/spin.mp3";
 import winSound from "../assets/sounds/win.mp3";
 import Options from "../Options/Options";
+import { addTransaction } from "../../Utils/APIRequests";
+import { useMutation } from "@tanstack/react-query";
 import SlotMachineIMG from "../assets/images/SlotMachine2.png";
+import useUserState from "../../../store/store";
 import "./SlotMachine.css";
 
 //Variables
 const SlotMachine = () => {
   const [reels, setReels] = useState([Slots[0], Slots[0], Slots[0]]);
   const [spin, setSpin] = useState(false);
-  const [coins, setCoins] = useState(1000);
+  const [money, setMoney] = useState(1000);
   const [message, setMessage] = useState("Lets Spin!!");
-  const [jackpot, setJackpot] = useState(10000);
+  const [jackpot, setJackpot] = useState(25000);
   const [lastWin, setLastWin] = useState(0);
   const [audioOn, setAudioOn] = useState(true);
   const [selectedBet, setSelectedBet] = useState(null);
@@ -24,6 +27,7 @@ const SlotMachine = () => {
   const winAudio = new Audio(winSound);
   const loseAudio = new Audio(loseSound);
   const coinAudio = new Audio(coinSound);
+  const { id } = useUserState();
 
   //Sounds configuration
   const toggleAudio = () => {
@@ -36,16 +40,35 @@ const SlotMachine = () => {
     }
   };
 
+  const transactionMutation = useMutation({
+    mutationFn: addTransaction,
+    onSuccess: (data) => {
+      console.log("Transaction response:", data);
+      if (data) {
+        setMoney(data.money || money);
+        setLastWin(data.lastWin || lastWin);
+        console.log(data.message || "Transaction succeeded");
+        setJackpot(data.jackpot || jackpot);
+      } else {
+        console.log("Transaction succeeded but no data returned");
+      }
+    },
+    onError: (error) => {
+      console.error("Error adding transaction:", error);
+      console.log("Transaction failed");
+    },
+  });
+
   //Spin Logic
   const spinReels = () => {
     const adjustedBetAmount = betAmount;
 
-    if (coins < adjustedBetAmount) {
+    if (money < adjustedBetAmount) {
       setMessage("insufficient funds. !Reload your coins!");
       return;
     }
 
-    setCoins((prev) => prev - adjustedBetAmount);
+    setMoney((prev) => prev - adjustedBetAmount);
     setSpin(true);
     setMessage("");
 
@@ -92,7 +115,7 @@ const SlotMachine = () => {
     if (selectedBet) {
       //tree numbers are the same
       if (currentReels.every((reel) => reel === selectedBet)) {
-        winAmount = (Slots.indexOf(currentReels[0])+1) * betAmount + 5000;
+        winAmount = (Slots.indexOf(currentReels[0]) + 1) * betAmount + 5000;
         playSound(winAudio);
       } else if (
         //two numbers are the same
@@ -106,13 +129,15 @@ const SlotMachine = () => {
           (currentReels[0] === selectedBet && currentReels[2] === selectedBet)
         ) {
           let match = 0;
-          winAmount = (Slots.indexOf(currentReels[match])+1) * betAmount + 100;
+          winAmount =
+            (Slots.indexOf(currentReels[match]) + 1) * betAmount + 100;
         } else if (
           currentReels[1] === selectedBet &&
           currentReels[2] === selectedBet
         ) {
           let match = 1;
-          winAmount = (Slots.indexOf(currentReels[match])+1) * betAmount + 100;
+          winAmount =
+            (Slots.indexOf(currentReels[match]) + 1) * betAmount + 100;
         }
         playSound(coinAudio);
       } else {
@@ -125,11 +150,11 @@ const SlotMachine = () => {
         currentReels[0] === currentReels[1] &&
         currentReels[1] === currentReels[2]
       ) {
-        winAmount = (Slots.indexOf(currentReels[0])+1) * betAmount + 1000;
+        winAmount = (Slots.indexOf(currentReels[0]) + 1) * betAmount + 1000;
         //tree jokers (jackpot)
         if (currentReels[0] === Slots[6]) {
           winAmount = jackpot;
-          setJackpot(10000);
+          setJackpot(25000);
         }
         playSound(winAudio);
         //two numbers are the same
@@ -143,10 +168,10 @@ const SlotMachine = () => {
           currentReels[0] === currentReels[2]
         ) {
           let match = 0;
-          winAmount = (Slots.indexOf(currentReels[match])+1) * betAmount;
+          winAmount = (Slots.indexOf(currentReels[match]) + 1) * betAmount;
         } else if (currentReels[1] === currentReels[2]) {
           let match = 1;
-          winAmount = (Slots.indexOf(currentReels[match])+1) * betAmount;
+          winAmount = (Slots.indexOf(currentReels[match]) + 1) * betAmount;
         }
         playSound(coinAudio); // Play the coin sound for partial wins
       } else {
@@ -155,13 +180,41 @@ const SlotMachine = () => {
     }
     if (winAmount > 0) {
       //increasing coins logic
-      setCoins((prev) => prev + winAmount);
+      setMoney((prev) => prev + winAmount);
       setLastWin(winAmount);
       setMessage(`You have won ${winAmount} coins.`);
       setJackpot((prev) => prev + betAmount);
     } else {
       setMessage("Sorry, try again!");
     }
+
+    const win_loss = winAmount > 0;
+    let moneyToSend;
+    if (win_loss) {
+      moneyToSend = winAmount;
+      // } else if {
+    } else {
+      moneyToSend = betAmount * -1;
+    }
+
+    let result;
+    if (selectedBet) {
+      result = { currentReels: currentReels, selectedBet: selectedBet };
+    } else {
+      result = currentReels;
+    }
+    
+
+    const transaction = {
+      id: id,
+      game: "slots",
+      win_loss: win_loss,
+      money: moneyToSend,
+      result: result,
+    };
+
+    console.log("Transaction:", transaction);
+    transactionMutation.mutate(transaction);
     console.log("Win Amount:", winAmount);
   };
 
@@ -185,7 +238,10 @@ const SlotMachine = () => {
           />
           <div className="SLTM-reel-container">
             {reels.map((Slot, index) => (
-              <div key={index} className={`SLTM-reel ${spin ? "spinning" : ""}`}>
+              <div
+                key={index}
+                className={`SLTM-reel ${spin ? "spinning" : ""}`}
+              >
                 {Slot}
               </div>
             ))}
@@ -229,52 +285,62 @@ const SlotMachine = () => {
             </button>
           </div>
           <div className="SLTM-spin-button-container">
-          <button
-            onClick={spinReels}
-            disabled={spin}
-            className={`SLTM-spin-button ${spin ? "disabled" : ""}`}
-          >
-            {spin ? "🔄 Spinning..." : `🎲 Spin (${betAmount} coins)`}
-          </button>
+            <button
+              onClick={spinReels}
+              disabled={spin}
+              className={`SLTM-spin-button ${spin ? "disabled" : ""}`}
+            >
+              {spin ? "🔄 Spinning..." : `🎲 Spin (${betAmount} coins)`}
+            </button>
           </div>
           <h3 className="SLTM-SLTMSpecialBet">Special Bets</h3>
           <div className="SLTM-betting-container">
             <button
               onClick={() => setSelectedBet("")}
-              className={`SLTM-bet-button ${selectedBet === "" ? "selected" : ""}`}
+              className={`SLTM-bet-button ${
+                selectedBet === "" ? "selected" : ""
+              }`}
             >
               ❌
             </button>
             <button
               onClick={() => setSelectedBet("👑")}
-              className={`SLTM-bet-button ${selectedBet === "👑" ? "selected" : ""}`}
+              className={`SLTM-bet-button ${
+                selectedBet === "👑" ? "selected" : ""
+              }`}
             >
               👑
             </button>
             <button
               onClick={() => setSelectedBet("🍒")}
-              className={`SLTM-bet-button ${selectedBet === "🍒" ? "selected" : ""}`}
+              className={`SLTM-bet-button ${
+                selectedBet === "🍒" ? "selected" : ""
+              }`}
             >
               🍒
             </button>
             <button
               onClick={() => setSelectedBet("💰")}
-              className={`SLTM-bet-button ${selectedBet === "💰" ? "selected" : ""}`}
+              className={`SLTM-bet-button ${
+                selectedBet === "💰" ? "selected" : ""
+              }`}
             >
               💰
             </button>
             <button
               onClick={() => setSelectedBet("💎")}
-              className={`SLTM-bet-button ${selectedBet === "💎" ? "selected" : ""}`}
+              className={`SLTM-bet-button ${
+                selectedBet === "💎" ? "selected" : ""
+              }`}
             >
               💎
             </button>
           </div>
           <div className="SLTM-info-container">
-          <div className="SLTM-Money-info-container">
-            <span>💰 Coins: {coins}</span>
-            <span>🏆 Jackpot: {jackpot}</span>
-          </div>
+            <div className="SLTM-Money-info-container">
+              <span>💰 Coins: {money}</span>
+              <span>🏆 Jackpot: {jackpot}</span>
+            </div>
           </div>
           <Options
             className="SLMSoundOnOff"
