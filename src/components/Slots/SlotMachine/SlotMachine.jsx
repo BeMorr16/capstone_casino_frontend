@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Slots from "../Slots/Slots";
 import coinSound from "../assets/sounds/coin.mp3";
@@ -14,9 +15,9 @@ import "./SlotMachine.css";
 
 //Variables
 const SlotMachine = () => {
+  const navigate = useNavigate()
   const [reels, setReels] = useState([Slots[0], Slots[0], Slots[0]]);
   const [spin, setSpin] = useState(false);
-  const [money, setMoney] = useState(1000);
   const [message, setMessage] = useState("Lets Spin!!");
   const [jackpot, setJackpot] = useState(25000);
   const [lastWin, setLastWin] = useState(0);
@@ -45,7 +46,7 @@ const SlotMachine = () => {
     onSuccess: (data) => {
       console.log("Transaction response:", data);
       if (data) {
-        setMoney(data.money || money);
+        setChipCount(data.chipCount || chipCount);
         setLastWin(data.lastWin || lastWin);
         console.log(data.message || "Transaction succeeded");
         setJackpot(data.jackpot || jackpot);
@@ -63,12 +64,13 @@ const SlotMachine = () => {
   const spinReels = () => {
     const adjustedBetAmount = betAmount;
 
-    if (money < adjustedBetAmount) {
+    if (chipCount < adjustedBetAmount) {
       setMessage("insufficient funds. !Reload your coins!");
       return;
     }
 
-    setMoney((prev) => prev - adjustedBetAmount);
+    setChipCount((prev) => prev - adjustedBetAmount);
+    adjustTableChips(-adjustedBetAmount);
     setSpin(true);
     setMessage("");
 
@@ -180,7 +182,8 @@ const SlotMachine = () => {
     }
     if (winAmount > 0) {
       //increasing coins logic
-      setMoney((prev) => prev + winAmount);
+      adjustTableChips(winAmount);
+      setChipCount((prev) => prev + winAmount);
       setLastWin(winAmount);
       setMessage(`You have won ${winAmount} coins.`);
       setJackpot((prev) => prev + betAmount);
@@ -189,12 +192,12 @@ const SlotMachine = () => {
     }
 
     const win_loss = winAmount > 0;
-    let moneyToSend;
+    let chipCountToSend;
     if (win_loss) {
-      moneyToSend = winAmount;
+      chipCountToSend = winAmount;
       // } else if {
     } else {
-      moneyToSend = betAmount * -1;
+      chipCountToSend = betAmount * -1;
     }
 
     let result;
@@ -209,7 +212,7 @@ const SlotMachine = () => {
       id: id,
       game: "slots",
       win_loss: win_loss,
-      money: moneyToSend,
+      money: chipCountToSend,
       result: result,
     };
 
@@ -218,8 +221,59 @@ const SlotMachine = () => {
     console.log("Win Amount:", winAmount);
   };
 
+  const { tableChips, isLoggedIn, userMoney, adjustTableChips, } = useUserState();
+  const [chipCount, setChipCount] = useState(() => {
+    if (isLoggedIn) {
+      if (tableChips > 0) {
+        return tableChips;
+      } else if (tableChips === 0) {
+        navigate('/casino');
+        return 0;
+      }
+    }
+    return 1000;
+  });
+  
+  console.log(userMoney, tableChips);
+  
+  // const addMoreChips = (amount) => {
+  //   if (userMoney >= amount) {
+  //     adjustTableChips(amount);
+  //     setChipCount(chipCount + amount);
+  //   } else {
+  //     console.error('Not enough money');
+  //   }
+  // };
+
+
   return (
     <div className="SLTM-slot-machine-background">
+      {/* <div>
+    <button onClick={() => addMoreChips(100)}>Add 100 Chips</button>
+  </div> */}
+          <div>
+          {/* Other components */}
+          <button 
+            className="SLTMtoCasinoFloorButton" 
+            onClick={() => navigate('/casino')}
+          >
+            Back to Casino Floor
+          </button>
+          <button 
+            className="SLTMtoBlackJackButton" 
+            onClick={() => navigate('/blackjack')}
+          >
+            To BlackJack
+          </button>
+          <button 
+            className="SLTMtoRouletteButton" 
+            onClick={() => navigate('/roulette')}
+          >
+            To Roulette
+          </button>
+        </div>
+        
+ <div className="SLTM-Blankspace"></div>
       <div className="SLTM-MainContainer">
         <div className="SLTM-slot-machine-container">
           <div
@@ -338,7 +392,7 @@ const SlotMachine = () => {
           </div>
           <div className="SLTM-info-container">
             <div className="SLTM-Money-info-container">
-              <span>💰 Coins: {money}</span>
+              <span>💰 Coins: {chipCount}</span>
               <span>🏆 Jackpot: {jackpot}</span>
             </div>
           </div>
