@@ -1,10 +1,9 @@
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Board from "./Board/Board";
 import ChipsSelector from "./ChipSelector/ChipSelector";
 import NumberHistory from "./NumberHistory/NumberHistory";
 import "./Roulette.css";
-import calculateWinningsHelper from "./helpers/calculateWinningsHelper";
 import {
   getRotationFromNumber,
   getRandomEndRotation,
@@ -14,35 +13,51 @@ import {
   spinWheelAnimation,
 } from "./helpers/wheelHelper";
 import { getRandomInt } from "./helpers/utils";
-import {addTransaction}  from "../Utils/APIRequests";
+import { addTransaction } from "../Utils/APIRequests";
 import useUserState from "../../store/store";
+import { useMutation } from "@tanstack/react-query";
+import calculateWinningsHelper, {
+  sendRouletteTransaction,
+} from "./helpers/calculateWinningsHelper";
 
 const Roulette = () => {
-  const bears = useUserState((state) => state.money);
-  console.log(bears, "-------------------------------------------------------------------------------------------")
+  const navigate = useNavigate();
   const [number, setNumber] = useState(null);
-  const [playerBalance, setPlayerBalance] = useState(1000);
   const [placedBets, setPlacedBets] = useState([]);
   const [betHistory, setBetHistory] = useState([]);
   const [lastBets, setLastBets] = useState([]);
-  const [lastBet, setLastBet] = useState(null);
   const [result, setResult] = useState(null);
   const [selectedChip, setSelectedChip] = useState(1);
   const [numberHistory, setNumberHistory] = useState([]);
   const [lastNumber, setLastNumber] = useState(0);
-  const [rouletteData, setRouletteData] = useState({
+  const [rouletteData] = useState({
     numbers: [
       0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5,
       24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26,
     ],
   });
+  const { tableChips, isLoggedIn, userMoney, adjustTableChips, id } =
+    useUserState();
+  const transactionMutation = useMutation({
+    mutationFn: addTransaction,
+  });
+  const [chipCount, setChipCount] = useState(() => {
+    if (isLoggedIn) {
+      if (tableChips > 0) {
+        return tableChips;
+      } else if (tableChips === 0) {
+        navigate("/casino");
+        return 0;
+      }
+    }
+    return 1000;
+  });
 
-  // Constants 
-  const totalNumbers = 37;
-  const singleSpinDuration = 5000;
-  const singleRotationDegree = 360 / totalNumbers;
-  
-
+  useEffect(() => {
+    if (tableChips === 0 && isLoggedIn) {
+      navigate("/casino");
+    }
+  }, [tableChips, isLoggedIn, navigate]);
 
   const spinWheel = (number) => {
     const bezier = [0.165, 0.84, 0.44, 1.005];
@@ -50,85 +65,75 @@ const Roulette = () => {
     const ballMaxNumberOfSpins = 4;
     const wheelMinNumberOfSpins = 2;
     const wheelMaxNumberOfSpins = 4;
-
-    const currentNumber = number;
     const lastNumberRotation = getRotationFromNumber(
       lastNumber.toString(),
       rouletteData,
-      singleRotationDegree
+      360 / 37
     );
-
     const endRotation = -getRandomEndRotation(
       ballMinNumberOfSpins,
       ballMaxNumberOfSpins,
-      totalNumbers,
-      singleRotationDegree
+      37,
+      360 / 37
     );
     const zeroFromEndRotation = getZeroEndRotation(endRotation);
     const ballEndRotation =
       getBallNumberOfRotations(wheelMinNumberOfSpins, wheelMaxNumberOfSpins) +
-      getBallEndRotation(
-        zeroFromEndRotation,
-        currentNumber,
-        rouletteData,
-        singleRotationDegree
-      );
-
+      getBallEndRotation(zeroFromEndRotation, number, rouletteData, 360 / 37);
     spinWheelAnimation(
       lastNumberRotation,
       endRotation,
       ballEndRotation,
-      singleSpinDuration,
+      5000,
       bezier
     );
-    setLastNumber(currentNumber);
+    setLastNumber(number);
   };
 
-  const calculateWinnings = (number, placedBets) => {
-    const { totalWinnings, betResults } = calculateWinningsHelper(
-      number,
-      placedBets
-    );
+  const handleEndOfGame = (randomNumber) => {
+    const { totalWinnings, betResults, totalBetAmount, totalWonAmount } =
+      calculateWinningsHelper(randomNumber, placedBets);
 
-    const newBalance = playerBalance + totalWinnings;
-    setPlayerBalance(newBalance);
+    const newBalance = chipCount + totalWinnings;
+    setChipCount(newBalance);
     setResult(totalWinnings);
-
-    console.log("Bets that hit and their payouts:");
-    betResults.forEach((result) => {
-      console.log(`Bet: ${result.bet}, Payout: ${result.payout}`);
-    });
-
     setLastBets(placedBets);
     setPlacedBets([]);
+    const win = totalWonAmount > 0;
+    const money = win ? totalWonAmount : -totalBetAmount;
+    sendRouletteTransaction(
+      win,
+      money,
+      {
+        winningNumber: randomNumber,
+        betResults: betResults
+          .map((result) => `Bet: ${result.bet}, Payout: ${result.payout}`)
+          .join(", "),
+      },
+      transactionMutation
+    );
   };
-
-
-  //  Handlers 
   const handleSpinClick = () => {
     const randomNumber = getRandomInt(0, 36);
     spinWheel(randomNumber);
-
     setTimeout(() => {
-      calculateWinnings(randomNumber, placedBets);
+      setNumber(randomNumber);
+      handleEndOfGame(randomNumber);
       setNumberHistory((prevHistory) => [
         randomNumber,
         ...prevHistory.slice(0, 11),
       ]);
-    }, singleSpinDuration);
+    }, 5000);
   };
-
   const handlePlaceBet = (newBet) => {
-    if (playerBalance < newBet.amount) {
+    if (chipCount < newBet.amount) {
       alert("You cannot bet more than your current balance.");
       return;
     }
-
     setPlacedBets((prevBets) => {
       const existingBet = prevBets.find(
         (bet) => JSON.stringify(bet.meaning) === JSON.stringify(newBet.meaning)
       );
-
       if (existingBet) {
         const updatedBets = prevBets.map((bet) =>
           JSON.stringify(bet.meaning) === JSON.stringify(newBet.meaning)
@@ -140,21 +145,16 @@ const Roulette = () => {
         return [...prevBets, newBet];
       }
     });
-
     setBetHistory((prevHistory) => [...prevHistory, newBet]);
-    setPlayerBalance((prevBalance) => prevBalance - newBet.amount);
+    setChipCount((prevBalance) => prevBalance - newBet.amount);
   };
-
   const handleUndoLastBet = () => {
     if (betHistory.length === 0) return;
-
     const lastBet = betHistory[betHistory.length - 1];
-
     setPlacedBets((prevBets) => {
       const betIndex = prevBets.findIndex(
         (bet) => JSON.stringify(bet.meaning) === JSON.stringify(lastBet.meaning)
       );
-
       if (betIndex !== -1) {
         const updatedBets = [...prevBets];
         if (updatedBets[betIndex].amount > lastBet.amount) {
@@ -166,36 +166,28 @@ const Roulette = () => {
       }
       return prevBets;
     });
-
-    setPlayerBalance((prevBalance) => prevBalance + lastBet.amount);
+    setChipCount((prevBalance) => prevBalance + lastBet.amount);
     setBetHistory((prevHistory) => prevHistory.slice(0, -1));
   };
-
   const handleClearBets = () => {
     const totalBets = placedBets.reduce((acc, bet) => acc + bet.amount, 0);
-    setPlayerBalance((prevBalance) => prevBalance + totalBets);
+    setChipCount((prevBalance) => prevBalance + totalBets);
     setPlacedBets([]);
   };
-
   const handleRepeatLastBets = () => {
     const totalLastBets = lastBets.reduce((acc, bet) => acc + bet.amount, 0);
-    if (playerBalance < totalLastBets) {
+    if (chipCount < totalLastBets) {
       alert("You cannot bet more than your current balance.");
       return;
     }
-
-    setPlayerBalance((prevBalance) => prevBalance - totalLastBets);
+    setChipCount((prevBalance) => prevBalance - totalLastBets);
     setPlacedBets(lastBets.map((bet) => ({ ...bet })));
   };
-
   const handleChipSelect = (chip) => {
     setSelectedChip(chip);
   };
-
   return (
     <div className="roulette-game">
-      <h1>Roulette Game</h1>
-
       <div className="wheel-and-history">
         <div className={"roulette-wheel"} onClick={handleSpinClick}>
           <div className={"layer-2 wheel"}></div>
@@ -210,7 +202,7 @@ const Roulette = () => {
       </div>
       {number !== null && <h2>Winning Number: {number}</h2>}
       {result !== null && <h2>Total Payout: ${result}</h2>}
-      {playerBalance !== null && <h2>Balance: ${playerBalance}</h2>}
+      {chipCount !== null && <h2>Balance: ${chipCount}</h2>}
       <button onClick={handleSpinClick}>Spin the Wheel</button>
       <ChipsSelector
         selectedChip={selectedChip}
@@ -227,5 +219,4 @@ const Roulette = () => {
     </div>
   );
 };
-
 export default Roulette;

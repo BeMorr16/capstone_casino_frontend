@@ -7,11 +7,16 @@ const isRed = (number) => {
 
 const calculateWinningsHelper = (number, placedBets) => {
   let totalWinnings = 0;
+  let totalBetAmount = 0;
+  let totalPayoutAmount = 0;
   const betResults = [];
 
   placedBets.forEach((bet) => {
     const meaning = bet.meaning;
     let payout = 0;
+
+    // Add the bet amount to the total bet amount
+    totalBetAmount += bet.amount;
 
     // Check if the bet is a single number bet stored as an array with one number
     if (
@@ -21,6 +26,7 @@ const calculateWinningsHelper = (number, placedBets) => {
     ) {
       payout = bet.amount * 35; // Straight-up bet (35 to 1)
       totalWinnings += payout + bet.amount; // Include the initial bet amount in the payout
+      totalPayoutAmount += payout; // Add the payout to the total payout amount
       betResults.push({ bet: meaning, payout: payout + bet.amount });
     } else if (Array.isArray(meaning)) {
       if (meaning.includes(number)) {
@@ -38,6 +44,7 @@ const calculateWinningsHelper = (number, placedBets) => {
           payout = bet.amount * 1; // Column bet (2 to 1)
         }
         totalWinnings += payout + bet.amount; // Include the initial bet amount in the payout
+        totalPayoutAmount += payout; // Add the payout to the total payout amount
         betResults.push({ bet: meaning, payout: payout + bet.amount });
       }
     } else if (typeof meaning === "string") {
@@ -51,12 +58,30 @@ const calculateWinningsHelper = (number, placedBets) => {
       ) {
         payout = bet.amount; // Even money bet (1 to 1)
         totalWinnings += payout + bet.amount; // Include the initial bet amount in the payout
+        totalPayoutAmount += payout; // Add the payout to the total payout amount
         betResults.push({ bet: meaning, payout: payout + bet.amount });
       }
     }
   });
 
-  return { totalWinnings, betResults };
+  const totalWonAmount = totalPayoutAmount - totalBetAmount;
+
+  return { totalWinnings, betResults, totalBetAmount, totalWonAmount };
+};
+
+export const sendRouletteTransaction = (win, money, result, transactionMutation) => {
+  const transaction = {
+    id: useUserState.getState().id,
+    game: "roulette",
+    win_loss: Boolean(win), // Ensure this is a boolean and the correct field name
+    money: money,
+    result: `Winning number: ${result.winningNumber}. Bets that hit: ${result.betResults}`,
+  };
+  if (useUserState.getState().isLoggedIn) {
+    transactionMutation.mutate(transaction);
+  } else {
+    console.log("not logged in");
+  }
 };
 
 export default calculateWinningsHelper;
