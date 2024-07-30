@@ -69,4 +69,19 @@ const calculateWinningsHelper = (number, placedBets) => {
   return { totalWinnings, betResults, totalBetAmount, totalWonAmount };
 };
 
+export const sendRouletteTransaction = (win, money, result, transactionMutation) => {
+  const transaction = {
+    id: useUserState.getState().id,
+    game: "roulette",
+    win_loss: Boolean(win), // Ensure this is a boolean and the correct field name
+    money: money,
+    result: `Winning number: ${result.winningNumber}. Bets that hit: ${result.betResults}`,
+  };
+  if (useUserState.getState().isLoggedIn) {
+    transactionMutation.mutate(transaction);
+  } else {
+    console.log("not logged in");
+  }
+};
+
 export default calculateWinningsHelper;
