@@ -1,4 +1,7 @@
-
+.BJBody {
+    width: inherit;
+    height: inherit;
+}
 
 .blackjackTopOuterContainer {
     display: flex;

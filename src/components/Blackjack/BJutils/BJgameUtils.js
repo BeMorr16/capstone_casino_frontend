@@ -38,7 +38,7 @@ export function handleStand(setIsDealersTurn, handleDealersTurn) {
     }
   }
   
-  export function handleSubmit(e, setIsDealersTurn, setIsHandComplete, setLockedBet, betAmount, setChipCount, randomizedDecks, setPlayersCards, setDealersCards, setRandomizedDecks, setBetAmount, setIsBlackjack, dealersCardsRef, deckRef, handleEndOfGame, playerCountRef) {
+  export function handleSubmit(e, setIsDealersTurn, setIsHandComplete, setLockedBet, betAmount, setChipCount, randomizedDecks, setPlayersCards, setDealersCards, setRandomizedDecks, setBetAmount, setIsBlackjack, dealersCardsRef, deckRef, handleEndOfGame, playerCountRef, playerCardsRef) {
     e.preventDefault();
     setIsDealersTurn(false);
     setIsHandComplete(false);
@@ -59,6 +59,7 @@ export function handleStand(setIsDealersTurn, handleDealersTurn) {
 
     let userCount = cardCount(drawnUserCards);
     playerCountRef.current = userCount;
+    playerCardsRef.current = drawnUserCards
     if (drawnUserCards.length === 2 && userCount === 21) {
       setIsBlackjack(true);
       handleEndOfGame()
@@ -85,4 +86,4 @@ export function sendTransaction(bool, lockedBet, transactionMutation) {
   } else {
     console.log("not logged in")
   }
-  }
+}

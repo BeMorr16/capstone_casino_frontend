@@ -4,7 +4,6 @@ import cardCount from '../BJutils/cardCount';
 
 const initialDecks = getDecks();
 
-
 const useStore = create((set) => ({
   randomizedDecks: initialDecks,
   betAmount: 0,
