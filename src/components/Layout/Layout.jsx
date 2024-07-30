@@ -4,7 +4,7 @@ import "./layout.css"
 
 export default function Layout() {
   return (
-      <div>
+      <div className='Layout'>
           <nav>
         <div className="nav-links">
           <Link to='/'>
