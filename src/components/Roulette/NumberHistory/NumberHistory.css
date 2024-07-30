@@ -1,0 +1,50 @@
+.number-history {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-top: 20px;
+  width: 100px; 
+}
+
+.number-history h3 {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.history-list {
+  display: flex;
+  justify-content: space-between;
+}
+
+.history-column {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  height: 360px;
+  overflow: hidden; 
+}
+
+.history-item {
+  width: 30px;
+  height: 30px;
+  margin: 2px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: #fff;
+  border: 1px solid #000;
+}
+
+.history-item.red {
+  background-color: #d44;
+}
+
+.history-item.black {
+  background-color: #444;
+}
+
+.history-item.blank {
+  background-color: transparent;
+  border: none;
+}
