@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import useStore from "../BJstore/BJstore"
 import { handleSubmit } from "../BJutils/BJgameUtils";
 import BJButton from "./BJButton"
@@ -24,7 +25,7 @@ export default function BJUserBetControls({ chipCount, setChipCount, dealersCard
               return  <BJButton setBetAmount={setBetAmount} key={amount} num={amount} chipCount={chipCount} />
             })}
           </div>
-          <form onSubmit={(e)=>  handleSubmit(e, setIsDealersTurn, setIsHandComplete, setLockedBet, betAmount, randomizedDecks,
+          <form onSubmit={(e)=>  handleSubmit(e, setIsDealersTurn, setIsHandComplete, setLockedBet, betAmount, setChipCount, randomizedDecks,
                 setPlayersCards, setDealersCards, setRandomizedDecks, setBetAmount, setIsBlackjack, dealersCardsRef, deckRef,
                 handleEndOfGame, playerCountRef, playerCardsRef)}>
             <div className="betControls">
@@ -52,3 +53,33 @@ export default function BJUserBetControls({ chipCount, setChipCount, dealersCard
         </div>
   )
 }
+
+BJUserBetControls.propTypes = {
+    chipCount: PropTypes.number.isRequired,
+    setChipCount: PropTypes.func.isRequired,
+    dealersCardsRef: PropTypes.shape({
+        current: PropTypes.arrayOf(PropTypes.shape({
+            frontImage: PropTypes.string.isRequired,
+            backImage: PropTypes.string.isRequired,
+            weight: PropTypes.number.isRequired
+        }))
+    }).isRequired,
+    deckRef: PropTypes.shape({
+        current: PropTypes.arrayOf(PropTypes.shape({
+            frontImage: PropTypes.string.isRequired,
+            backImage: PropTypes.string.isRequired,
+            weight: PropTypes.number.isRequired
+        }))
+    }).isRequired,
+    handleEndOfGame: PropTypes.func.isRequired,
+    playerCountRef: PropTypes.shape({
+        current: PropTypes.number
+    }).isRequired,
+    playerCardsRef: PropTypes.shape({
+        current: PropTypes.arrayOf(PropTypes.shape({
+            frontImage: PropTypes.string.isRequired,
+            backImage: PropTypes.string.isRequired,
+            weight: PropTypes.number.isRequired
+        }))
+    }).isRequired
+};

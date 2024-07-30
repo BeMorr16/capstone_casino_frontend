@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import BJCardSection from "./BJCardSection";
 import BJTurnControls from "./BJTurnControls";
 import BJUserBetControls from "./BJUserBetControls";
+import BJnavigations from "./BJnavigations";
 
 export default function Blackjack() {
   const {
@@ -58,13 +59,7 @@ export default function Blackjack() {
     mutationFn: addTransaction,
   });
   const navigate = useNavigate();
-  const {
-    tableChips,
-    isLoggedIn,
-    userMoney,
-    adjustTableChips,
-    returnChipsToTotal,
-  } = useUserState();
+  const { tableChips, isLoggedIn, adjustTableChips } = useUserState();
   const [chipCount, setChipCount] = useState(() => {
     if (isLoggedIn) {
       if (tableChips > 0) {
@@ -76,8 +71,6 @@ export default function Blackjack() {
     }
     return 1000;
   });
-
-  console.log(userMoney, tableChips);
 
   function dealerHitAgain() {
     const [drawnDealerCard, ...remainingDeck] = deckRef.current;
@@ -99,12 +92,7 @@ export default function Blackjack() {
   }
 
   function handleDealersTurn() {
-    if (
-      dealerCountRef.current < 17 &&
-      dealerCount < 17 &&
-      !isPlayerBusted &&
-      !isBlackjack
-    ) {
+    if (dealerCountRef.current < 17 && dealerCount < 17 && !isPlayerBusted && !isBlackjack) {
       setTimeout(() => {
         dealerHitAgain();
         handleDealersTurn();
@@ -116,10 +104,7 @@ export default function Blackjack() {
 
   function handleEndOfGame() {
     const playerCountToCompare = playerCountRef.current;
-    const dealerCountToCompare =
-      dealerCount > dealerCountRef.current
-        ? dealerCount
-        : dealerCountRef.current;
+    const dealerCountToCompare = dealerCount > dealerCountRef.current ? dealerCount : dealerCountRef.current;
     const bet = useStore.getState().lockedBet;
     if (playerCardsRef.current.length === 2 && playerCountRef.current === 21) {
       setWinner(`Player wins ${bet * 2.5} with Blackjack!`);
@@ -169,19 +154,6 @@ export default function Blackjack() {
     }, 2500);
   }
 
-  function handleToCasino() {
-    returnChipsToTotal();
-    navigate("/casino");
-  }
-
-  function handleToSlots() {
-    navigate("/slots");
-  }
-
-  function handleToRoulette() {
-    navigate("/roulette");
-  }
-
   return (
     <>
       <div className="BJBody">
@@ -193,27 +165,14 @@ export default function Blackjack() {
             </section>
             <BJCardSection />
             {!isHandComplete && (
-              <BJTurnControls
-                chipCount={chipCount}
-                setChipCount={setChipCount}
-                playerCardsRef={playerCardsRef}
-                playerCountRef={playerCountRef}
-                deckRef={deckRef}
-                handleDealersTurn={handleDealersTurn}
-                handleEndOfGame={handleEndOfGame}
-              />
-            )}
+              <BJTurnControls chipCount={chipCount} setChipCount={setChipCount} playerCardsRef={playerCardsRef}
+                playerCountRef={playerCountRef} deckRef={deckRef} handleDealersTurn={handleDealersTurn}
+                handleEndOfGame={handleEndOfGame} /> )}
           </div>
         </div>
-        <BJUserBetControls
-          chipCount={chipCount}
-          setChipCount={setChipCount}
-          dealersCardsRef={dealersCardsRef}
-          deckRef={deckRef}
-          handleEndOfGame={handleEndOfGame}
-          playerCountRef={playerCountRef}
-          playerCardsRef={playerCardsRef}
-        />
+        <BJUserBetControls chipCount={chipCount} setChipCount={setChipCount} dealersCardsRef={dealersCardsRef}
+          deckRef={deckRef} handleEndOfGame={handleEndOfGame} playerCountRef={playerCountRef}
+          playerCardsRef={playerCardsRef} />
         {winner && (
           <div className="BJPreviousBet">
             <h2>Previous Bet:</h2>
@@ -221,19 +180,10 @@ export default function Blackjack() {
             <p>wagered: {previousBet}</p>
           </div>
         )}
-
         <div className="BJbetAmountBeforeHand">
           {betAmount > 0 && <h3>{betAmount}</h3>}
-        </div>
-        <button className="BJtoCasinoFloorButton" onClick={handleToCasino}>
-          Back to Casino Floor
-        </button>
-        <button className="BJtoSlotsButton" onClick={handleToSlots}>
-          To Slots
-        </button>
-        <button className="BJtoRouletteButton" onClick={handleToRoulette}>
-          To Roulette
-        </button>
+              </div>
+              <BJnavigations/>
       </div>
     </>
   );
