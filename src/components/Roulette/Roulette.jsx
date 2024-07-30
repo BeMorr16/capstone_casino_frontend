@@ -1,5 +1,5 @@
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Board from "./Board/Board";
 import ChipsSelector from "./ChipSelector/ChipSelector";
 import NumberHistory from "./NumberHistory/NumberHistory";
@@ -14,14 +14,13 @@ import {
   spinWheelAnimation,
 } from "./helpers/wheelHelper";
 import { getRandomInt } from "./helpers/utils";
-import {addTransaction}  from "../Utils/APIRequests";
+import { addTransaction } from "../Utils/APIRequests";
 import useUserState from "../../store/store";
+import { useMutation } from "@tanstack/react-query";
 
 const Roulette = () => {
-  const bears = useUserState((state) => state.money);
-  console.log(bears, "-------------------------------------------------------------------------------------------")
+  const navigate = useNavigate();
   const [number, setNumber] = useState(null);
-  const [playerBalance, setPlayerBalance] = useState(1000);
   const [placedBets, setPlacedBets] = useState([]);
   const [betHistory, setBetHistory] = useState([]);
   const [lastBets, setLastBets] = useState([]);
@@ -30,19 +29,42 @@ const Roulette = () => {
   const [selectedChip, setSelectedChip] = useState(1);
   const [numberHistory, setNumberHistory] = useState([]);
   const [lastNumber, setLastNumber] = useState(0);
-  const [rouletteData, setRouletteData] = useState({
+  const [rouletteData] = useState({
     numbers: [
       0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5,
       24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26,
     ],
   });
 
-  // Constants 
+  const { tableChips, isLoggedIn, userMoney, adjustTableChips, id } =
+    useUserState();
+  const transactionMutation = useMutation({
+    mutationFn: addTransaction,
+  });
+  const [chipCount, setChipCount] = useState(() => {
+    if (isLoggedIn) {
+      if (tableChips > 0) {
+        return tableChips;
+      } else if (tableChips === 0) {
+        navigate("/casino");
+        return 0;
+      }
+    }
+    return 1000;
+  });
+
+  useEffect(() => {
+    if (tableChips === 0 && isLoggedIn) {
+      navigate("/casino");
+    }
+  }, [tableChips, isLoggedIn, navigate]);
+
+  
+
+  // Constants
   const totalNumbers = 37;
   const singleSpinDuration = 5000;
   const singleRotationDegree = 360 / totalNumbers;
-  
-
 
   const spinWheel = (number) => {
     const bezier = [0.165, 0.84, 0.44, 1.005];
@@ -85,13 +107,11 @@ const Roulette = () => {
   };
 
   const calculateWinnings = (number, placedBets) => {
-    const { totalWinnings, betResults } = calculateWinningsHelper(
-      number,
-      placedBets
-    );
+    const { totalWinnings, betResults, totalBetAmount, totalWonAmount } =
+      calculateWinningsHelper(number, placedBets);
 
-    const newBalance = playerBalance + totalWinnings;
-    setPlayerBalance(newBalance);
+    const newBalance = chipCount + totalWinnings;
+    setChipCount(newBalance);
     setResult(totalWinnings);
 
     console.log("Bets that hit and their payouts:");
@@ -101,16 +121,66 @@ const Roulette = () => {
 
     setLastBets(placedBets);
     setPlacedBets([]);
+
+    const win = totalWonAmount > 0;
+    const money = win ? totalWonAmount : -totalBetAmount;
+
+    // Send the transaction data
+    sendRouletteTransaction(win, money, {
+      winningNumber: number,
+      betResults: betResults
+        .map((result) => `Bet: ${result.bet}, Payout: ${result.payout}`)
+        .join(", "),
+    });
+
+    return { totalWinnings, betResults, totalBetAmount, totalWonAmount };
   };
 
+  const sendRouletteTransaction = (win, money, result) => {
+    const transaction = {
+      id: useUserState.getState().id,
+      game: "roulette",
+      win_loss: Boolean(win), // Ensure this is a boolean and the correct field name
+      money: money,
+      result: `Winning number: ${result.winningNumber}. Bets that hit: ${result.betResults}`,
+    };
 
-  //  Handlers 
+    // Log the transaction details
+    console.log("Transaction Payload:", JSON.stringify(transaction, null, 2));
+
+    if (useUserState.getState().isLoggedIn) {
+      transactionMutation.mutate(transaction);
+    } else {
+      console.log("not logged in");
+    }
+  };
+
+  const handleEndOfGame = (randomNumber) => {
+    const { totalWinnings, betResults, totalBetAmount, totalWonAmount } =
+      calculateWinnings(randomNumber, placedBets);
+
+    const win = totalWonAmount > 0;
+    const money = win ? totalWonAmount : -totalBetAmount;
+    console.log("MONEY:  ",money);
+    sendRouletteTransaction(win, money, {
+      winningNumber: randomNumber,
+      betResults: betResults
+        .map((result) => `Bet: ${result.bet}, Payout: ${result.payout}`)
+        .join(", "),
+    });
+
+    setLastBets(placedBets);
+    setPlacedBets([]);
+  };
+
+  // Handlers
   const handleSpinClick = () => {
     const randomNumber = getRandomInt(0, 36);
     spinWheel(randomNumber);
 
     setTimeout(() => {
-      calculateWinnings(randomNumber, placedBets);
+      setNumber(randomNumber);
+      handleEndOfGame(randomNumber);
       setNumberHistory((prevHistory) => [
         randomNumber,
         ...prevHistory.slice(0, 11),
@@ -119,7 +189,7 @@ const Roulette = () => {
   };
 
   const handlePlaceBet = (newBet) => {
-    if (playerBalance < newBet.amount) {
+    if (chipCount < newBet.amount) {
       alert("You cannot bet more than your current balance.");
       return;
     }
@@ -142,7 +212,7 @@ const Roulette = () => {
     });
 
     setBetHistory((prevHistory) => [...prevHistory, newBet]);
-    setPlayerBalance((prevBalance) => prevBalance - newBet.amount);
+    setChipCount((prevBalance) => prevBalance - newBet.amount);
   };
 
   const handleUndoLastBet = () => {
@@ -167,24 +237,24 @@ const Roulette = () => {
       return prevBets;
     });
 
-    setPlayerBalance((prevBalance) => prevBalance + lastBet.amount);
+    setChipCount((prevBalance) => prevBalance + lastBet.amount);
     setBetHistory((prevHistory) => prevHistory.slice(0, -1));
   };
 
   const handleClearBets = () => {
     const totalBets = placedBets.reduce((acc, bet) => acc + bet.amount, 0);
-    setPlayerBalance((prevBalance) => prevBalance + totalBets);
+    setChipCount((prevBalance) => prevBalance + totalBets);
     setPlacedBets([]);
   };
 
   const handleRepeatLastBets = () => {
     const totalLastBets = lastBets.reduce((acc, bet) => acc + bet.amount, 0);
-    if (playerBalance < totalLastBets) {
+    if (chipCount < totalLastBets) {
       alert("You cannot bet more than your current balance.");
       return;
     }
 
-    setPlayerBalance((prevBalance) => prevBalance - totalLastBets);
+    setChipCount((prevBalance) => prevBalance - totalLastBets);
     setPlacedBets(lastBets.map((bet) => ({ ...bet })));
   };
 
@@ -210,7 +280,7 @@ const Roulette = () => {
       </div>
       {number !== null && <h2>Winning Number: {number}</h2>}
       {result !== null && <h2>Total Payout: ${result}</h2>}
-      {playerBalance !== null && <h2>Balance: ${playerBalance}</h2>}
+      {chipCount !== null && <h2>Balance: ${chipCount}</h2>}
       <button onClick={handleSpinClick}>Spin the Wheel</button>
       <ChipsSelector
         selectedChip={selectedChip}
