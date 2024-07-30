@@ -10,6 +10,7 @@ export async function addTransaction(transaction) {
       transaction,
       {
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
       }
@@ -29,11 +30,13 @@ export async function registerUser(formData) {
     if (data.token) {
         window.sessionStorage.setItem("token", data.token);
         const { id, user_money } = data;
-        useUserState.getState().setUser(id, user_money);
+      useUserState.getState().setUser(id, user_money);
+      useUserState.getState().setIsLoggedIn(true);
     }
     return data;
   } catch (error) {
     console.log(error);
+    throw error; 
   }
 }
 
@@ -46,31 +49,45 @@ export async function loginUser(formData) {
     if (data.token) {
         window.sessionStorage.setItem("token", data.token);
         const { id, user_money } = data;
-        useUserState.getState().setUser(id, user_money);
+      useUserState.getState().setUser(id, user_money);
+      useUserState.getState().setIsLoggedIn(true);
     }
     return data;
   } catch (error) {
     console.log(error);
+    throw error; 
   }
 }
 
 export async function betLeaderboardRequest() {
-  const { data } = await axios.get(
-    "https://capstone-casino-backend.onrender.com/leaderboard/transaction"
-  );
-  return data;
+  try {
+    const { data } = await axios.get(
+      "https://capstone-casino-backend.onrender.com/leaderboard/transaction"
+    );
+    return data;
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 export async function recordLeaderboardRequest() {
-  const { data } = await axios.get(
-    "https://capstone-casino-backend.onrender.com/leaderboard/user/record"
-  );
-  return data;
+  try {
+    const { data } = await axios.get(
+      "https://capstone-casino-backend.onrender.com/leaderboard/user/record"
+    );
+    return data;
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 export async function moneyLeaderboardRequest() {
-  const { data } = await axios.get(
-    "https://capstone-casino-backend.onrender.com/leaderboard/user"
-  );
-  return data;
+  try {
+    const { data } = await axios.get(
+      "https://capstone-casino-backend.onrender.com/leaderboard/user"
+    );
+    return data;
+  } catch (error) {
+    console.log(error)
+  }
 }

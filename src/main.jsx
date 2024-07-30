@@ -1,6 +1,5 @@
 import React, { lazy, Suspense } from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./components/Home/Home.jsx";
@@ -13,6 +12,7 @@ import Casino from "./components/Casino/Casino.jsx";
 import HowToPlay from "./components/HowToPlays/HowToPlay.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Warehouse from "./components/Warehouse/Warehouse.jsx";
+
 
 const Blackjack = lazy(() => import('./components/Blackjack/BJComponents/Blackjack.jsx'));
 

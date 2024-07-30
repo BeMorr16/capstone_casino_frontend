@@ -1,35 +1,44 @@
+import useUserState from "../../../store/store";
+import useStore from "../BJstore/BJstore";
 import cardCount from "./cardCount";
 
-
-export function handleHit(randomizedDecks, setPlayersCards, setIsPlayerBusted, setIsDealersTurn, setRandomizedDecks) {
-    const drawnUserCard = randomizedDecks.slice(0, 1);
-    if (!Array.isArray(drawnUserCard) || drawnUserCard.length === 0) {
-        return;
-    }
+  
+  
+export function handleStand(setIsDealersTurn, handleDealersTurn) {
+  setIsDealersTurn(true);
+  handleDealersTurn();
+}
+  
+  export function handleHit(playerCardsRef, deckRef, setPlayersCards, setIsPlayerBusted, setRandomizedDecks, handleEndOfGame, playerCountRef) {
+    const [drawnUserCard, ...remainingDeck] = deckRef.current;
+    if (!drawnUserCard) {
+      return;
+  }
     setPlayersCards((prev) => {
-      const newCards = [...prev, ...drawnUserCard];
-        const newCount = cardCount(newCards);
+      const newCards = [...prev, drawnUserCard];
+      const newCount = cardCount(newCards);
+      playerCountRef.current = newCount;
+      playerCardsRef.current = newCards;
       if (newCount > 21) {
         setIsPlayerBusted(true);
-        setIsDealersTurn(true);
+        handleEndOfGame();
       }
       return newCards;
     });
-    setRandomizedDecks(randomizedDecks.slice(1));
+    deckRef.current = remainingDeck;
+    setRandomizedDecks(() => remainingDeck);
   }
-  
-export function handleStand (setIsDealersTurn){
-      setIsDealersTurn(true);
-  }
-  
-  export function handleDouble(chipCount, lockedBet, setChipCount, handleHit, setIsDealersTurn, setLockedBet, randomizedDecks, setPlayersCards, setIsPlayerBusted, setRandomizedDecks){
+
+  export function handleDouble(deckRef, lockedBet, setChipCount, handleHit, setIsDealersTurn, setLockedBet, setPlayersCards, setIsPlayerBusted, setRandomizedDecks, handleDealersTurn, handleEndOfGame, playerCardsRef, playerCountRef){
     setChipCount((prev) => prev - lockedBet);
     setLockedBet(lockedBet * 2);
-    handleHit(randomizedDecks, setPlayersCards, setIsPlayerBusted, setIsDealersTurn, setRandomizedDecks)
-    setIsDealersTurn(true);
+    handleHit(playerCardsRef, deckRef, setPlayersCards, setIsPlayerBusted, setRandomizedDecks, handleEndOfGame, playerCountRef)
+    if (playerCountRef.current < 22) {
+      handleStand(setIsDealersTurn, handleDealersTurn);
+    }
   }
   
-  export function handleSubmit(e, setIsDealersTurn, setIsHandComplete, setLockedBet, betAmount, setChipCount, randomizedDecks, setPlayersCards, setDealersCards, setRandomizedDecks, setBetAmount, setWinner, lockedBet) {
+  export function handleSubmit(e, setIsDealersTurn, setIsHandComplete, setLockedBet, betAmount, setChipCount, randomizedDecks, setPlayersCards, setDealersCards, setRandomizedDecks, setBetAmount, setIsBlackjack, dealersCardsRef, deckRef, handleEndOfGame, playerCountRef) {
     e.preventDefault();
     setIsDealersTurn(false);
     setIsHandComplete(false);
@@ -39,20 +48,41 @@ export function handleStand (setIsDealersTurn){
     const drawnUserCards = randomizedDecks.slice(0, 2);
     setPlayersCards((prev) => [...prev, ...drawnUserCards]);
     const drawnHouseCards = randomizedDecks.slice(2, 4);
-    setDealersCards((prev) => [...prev, ...drawnHouseCards]);
-    setRandomizedDecks(randomizedDecks.slice(4));
+    setDealersCards((prev) => {
+      const newCards = [...prev, ...drawnHouseCards];
+      dealersCardsRef.current = newCards;
+      return newCards;
+    });
+    const remainingDeck = randomizedDecks.slice(4);
+    deckRef.current = remainingDeck;
+    setRandomizedDecks(()=> remainingDeck);
+
     let userCount = cardCount(drawnUserCards);
-    let dealerCount = cardCount(drawnHouseCards);
+    playerCountRef.current = userCount;
     if (drawnUserCards.length === 2 && userCount === 21) {
-      setIsDealersTurn(true);
-      if (dealerCount === 21) {
-        setWinner("Push");
-        setChipCount((prev) => prev + lockedBet);
-      } else {
-        setWinner(`Player wins ${lockedBet * 2.5} with Blackjack!`);
-        setChipCount((prev) => prev + lockedBet * 2.5);
-      }
-      setIsHandComplete(true);
+      setIsBlackjack(true);
+      handleEndOfGame()
     }
   }
   
+
+export function sendTransaction(bool, lockedBet, transactionMutation) {
+  let money;
+  if (!bool && lockedBet !== 0) {
+    money = lockedBet * (-1)
+  } else {
+    money = lockedBet
+  }
+  const transaction = {
+    id: useUserState.getState().id,
+    game: 'blackjack',
+    win_loss: bool,
+    money: money,
+    result: `Player: ${useStore.getState().playerCount}, Dealer: ${useStore.getState().dealerCount}`
+  };
+  if (useUserState.getState().isLoggedIn) {
+    transactionMutation.mutate(transaction)
+  } else {
+    console.log("not logged in")
+  }
+  }

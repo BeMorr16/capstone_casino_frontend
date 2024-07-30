@@ -4,9 +4,10 @@ import cardCount from '../BJutils/cardCount';
 
 const initialDecks = getDecks();
 
+
 const useStore = create((set) => ({
   randomizedDecks: initialDecks,
-  chipCount: 1000,
+  chipCount: 0,
   betAmount: 0,
   lockedBet: 0,
   previousBet: 0,
@@ -14,11 +15,12 @@ const useStore = create((set) => ({
   dealerCount: 0,
   playersCards: [],
   playerCount: 0,
+  isBlackjack: false,
   isPlayerBusted: false,
   isDealersTurn: false,
   isHandComplete: true,
   winner: "",
-  setRandomizedDecks: (decks) => set({ randomizedDecks: decks }),
+  setRandomizedDecks: (updateFn) => set((state) => ({ randomizedDecks: updateFn(state.randomizedDecks) })),
   setChipCount: (updateFn) => set((state) => ({ chipCount: updateFn(state.chipCount) })),
     setBetAmount: (updateFn) => set((state) => {
         const amount = updateFn(state.betAmount);
@@ -45,6 +47,7 @@ const useStore = create((set) => ({
           };
     }),
             
+  setIsBlackjack: (value) => set({ isBlackjack: value }),
   setIsPlayerBusted: (value) => set({ isPlayerBusted: value }),
   setIsDealersTurn: (value) => set({ isDealersTurn: value }),
   setIsHandComplete: (value) => set({ isHandComplete: value }),
@@ -59,7 +62,7 @@ const useStore = create((set) => ({
     isHandComplete: true,
     lockedBet: 0
   }),
-  reshuffleDecks: () => set({ randomizedDecks: getDecks() })
+reshuffleDecks: () => set({ randomizedDecks: getDecks() }),
 }));
 
 export default useStore;

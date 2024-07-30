@@ -6,6 +6,7 @@
 export default function cardCount(cards) {
     let count = 0;
     let aces = 0;
+
         for (let card of cards){
             if (card.value === 'A') {
                 aces += 1;

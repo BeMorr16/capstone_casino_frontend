@@ -21,12 +21,18 @@ export default function LoginRegister() {
     mutationFn: registerUser,
     onSuccess: () => {
       navigate('/warehouse')
+    },
+    onError: (error) => {
+      console.error('Registration error:', error);
     }
   })
   const loginMutation = useMutation({
     mutationFn: loginUser,
     onSuccess: () => {
-      navigate('/warehouse')
+      navigate('/warehouse');
+    },
+    onError: (error) => {
+      console.error('Login error:', error);
     }
   })
 

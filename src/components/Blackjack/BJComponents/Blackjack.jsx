@@ -1,8 +1,12 @@
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./BJ.css";
 import BJButton from "./BJButton";
 import useStore from "../BJstore/BJstore";
-import { handleDouble, handleHit, handleStand, handleSubmit } from "../BJutils/BJgameUtils";
+import { handleDouble, handleHit, handleStand, handleSubmit, sendTransaction } from "../BJutils/BJgameUtils";
+import { useMutation } from "@tanstack/react-query";
+import { addTransaction } from "../../Utils/APIRequests";
+import cardCount from "../BJutils/cardCount";
+import useUserState from "../../../store/store";
 
 export default function Blackjack() {
     const {
@@ -15,6 +19,7 @@ export default function Blackjack() {
         dealerCount,
         playersCards,
         playerCount,
+        isBlackjack,
         isPlayerBusted,
         isDealersTurn,
         isHandComplete,
@@ -29,6 +34,7 @@ export default function Blackjack() {
         setIsPlayerBusted,
         setIsDealersTurn,
         setIsHandComplete,
+        setIsBlackjack,
         setWinner,
         resetGame,
         reshuffleDecks
@@ -42,6 +48,7 @@ export default function Blackjack() {
         dealerCount: state.dealerCount,
         playersCards: state.playersCards,
         playerCount: state.playerCount,
+        isBlackjack: state.isBlackjack,
         isPlayerBusted: state.isPlayerBusted,
         isDealersTurn: state.isDealersTurn,
         isHandComplete: state.isHandComplete,
@@ -56,39 +63,94 @@ export default function Blackjack() {
         setIsPlayerBusted: state.setIsPlayerBusted,
         setIsDealersTurn: state.setIsDealersTurn,
         setIsHandComplete: state.setIsHandComplete,
+        setIsBlackjack: state.setIsBlackjack,
         setWinner: state.setWinner,
         resetGame: state.resetGame,
         drawCards: state.drawCards,
         reshuffleDecks: state.reshuffleDecks
     }));
     const [showWinner, setShowWinner] = useState(false)
+    const dealerCountRef = useRef(0);
+    const dealersCardsRef = useRef([]);
+    const deckRef = useRef(randomizedDecks);
+    const playerCountRef = useRef(0);
+    const playerCardsRef = useRef([]);
+    const transactionMutation = useMutation({
+        mutationFn: addTransaction
+    })
+
+
+    const { tableChips, isLoggedIn, userMoney, adjustTableChips } = useUserState();
+
+
+
+    useEffect(() => {
+    if (isLoggedIn) {
+        setChipCount(() => useUserState.getState().tableChips || 0);
+    } else {
+        setChipCount(() => 1000);
+    }
+    }, [setChipCount, isLoggedIn])
     
 
-    const dealerHitAgain = useCallback(() => {
-        const drawnDealerCard = randomizedDecks.slice(0, 1);
+    console.log(userMoney, tableChips)
+    
+    function dealerHitAgain() {
+        const [drawnDealerCard, ...remainingDeck] = deckRef.current;
         setDealersCards((prev) => {
-            const newCards = [...prev, ...drawnDealerCard]
-            return newCards
+            const newCards = [...prev, drawnDealerCard];
+            dealersCardsRef.current = newCards;
+            return newCards;
         });
-        setRandomizedDecks(randomizedDecks.slice(1));
-    }, [setDealersCards, randomizedDecks, setRandomizedDecks]);
+        deckRef.current = remainingDeck;
+        setRandomizedDecks(() => remainingDeck);
+        updatedDealerCount();
+    }
 
+    function updatedDealerCount() {
+        const allCards = [...dealersCardsRef.current]
+        const total = cardCount(allCards)
+        dealerCountRef.current = total;
+        dealersCardsRef.current = allCards;
+}
 
-    const handleEndOfGame = useCallback(() => {
-        if (isPlayerBusted) {
-            setWinner("Dealer wins!");
-        } else if (dealerCount > 21) {
+function handleDealersTurn() {
+    if (dealerCountRef.current < 17 && dealerCount < 17 && !isPlayerBusted && !isBlackjack) {
+        setTimeout(() => {
+            dealerHitAgain();
+            handleDealersTurn();
+        }, 500);
+    } else {
+        handleEndOfGame();
+    }
+}
+
+    
+    function handleEndOfGame() {
+        const playerCountToCompare = playerCountRef.current;
+        const dealerCountToCompare = dealerCount > dealerCountRef.current ? dealerCount : dealerCountRef.current;
+        if (playerCardsRef.current.length === 2 && playerCountRef.current === 21) {
+            setWinner(`Player wins ${lockedBet * 2.5} with Blackjack!`)
+        } else if (isPlayerBusted || playerCountToCompare > 21) {
+            setWinner("Busted! Dealer wins");
+            sendTransaction(false, lockedBet, transactionMutation)
+            adjustTableChips((-lockedBet))
+        } else if (dealerCountToCompare > 21) {
             setWinner(`Player wins ${lockedBet * 2}!`);
             setChipCount((prev) => prev + lockedBet * 2);
-        } else if (dealerCount >= 17) {
-            if (playerCount > dealerCount) {
+            sendTransaction(true, lockedBet, transactionMutation)
+        } else if (dealerCountToCompare >= 17) {
+            if (playerCountToCompare > dealerCountToCompare) {
                 setWinner(`Player wins ${lockedBet * 2}!`);
                 setChipCount((prev) => prev + lockedBet * 2);
-            } else if (playerCount < dealerCount) {
+                sendTransaction(true, lockedBet, transactionMutation)
+            } else if (playerCountToCompare < dealerCountToCompare) {
                 setWinner("Dealer wins!");
-            } else if (playerCount === dealerCount) {
+                sendTransaction(false, lockedBet, transactionMutation)
+            } else if (playerCountToCompare === dealerCountToCompare) {
                 setWinner("Push");
                 setChipCount((prev) => prev + lockedBet);
+                sendTransaction(false, 0, transactionMutation)
             }
         }
         setShowWinner(true)
@@ -98,34 +160,19 @@ export default function Blackjack() {
         }, 1000)
         setTimeout(() => {
             resetGame();
-            if (randomizedDecks.length < 30) {
-                reshuffleDecks(); // Reshuffle if needed
+            dealerCountRef.current = 0;
+            dealersCardsRef.current = [];
+            playerCardsRef.current = [];
+            playerCountRef.current = 0;
+            setIsBlackjack(false);
+
+
+            if (deckRef.current.length < 30) {
+                reshuffleDecks();
             }
         }, 2000)
-    }, [dealerCount, playerCount, isPlayerBusted, randomizedDecks, lockedBet, setChipCount, setPreviousBet, setWinner, reshuffleDecks, resetGame]);
-
+    }
     
-    useEffect(() => {
-        if (isDealersTurn && !isHandComplete) {
-            const dealerPlay = () => {
-                if (dealerCount < 17 && !isPlayerBusted) {
-                    setTimeout(dealerHitAgain, 500);
-                } else {
-                    handleEndOfGame();
-                }
-            };
-            dealerPlay();
-        }
-    }, [
-        dealerCount,
-        isDealersTurn,
-        dealerHitAgain,
-        handleEndOfGame,
-        isHandComplete,
-        isPlayerBusted,
-    ]);
-
-
     return (
         <>
             <div className="BJBody">
@@ -171,13 +218,13 @@ export default function Blackjack() {
                         <div className="BJTurnContainer">
                             <h3>Wager: {lockedBet}</h3>
                             <div className="blackjackTurnControls">
-                                <button onClick={() => handleHit(randomizedDecks, setPlayersCards, setIsPlayerBusted, setIsDealersTurn, setRandomizedDecks)} disabled={isDealersTurn || isHandComplete}>
+                                    <button onClick={() => handleHit(playerCardsRef, deckRef, setPlayersCards, setIsPlayerBusted, setRandomizedDecks, handleEndOfGame, playerCountRef)} disabled={isDealersTurn || isHandComplete}>
                                     HIT
                                 </button>
-                                <button onClick={() => handleStand(setIsDealersTurn)} disabled={isDealersTurn || isHandComplete}>
+                                <button onClick={() => handleStand(setIsDealersTurn, handleDealersTurn)} disabled={isDealersTurn || isHandComplete}>
                                     STAND
                                 </button>
-                                <button onClick={() => handleDouble(chipCount, lockedBet, setChipCount, handleHit, setIsDealersTurn, setLockedBet, randomizedDecks, setPlayersCards, setIsPlayerBusted, setRandomizedDecks)} disabled={isDealersTurn || isHandComplete || ((lockedBet * 2)  > chipCount) }>
+                                <button onClick={() => handleDouble(deckRef, lockedBet, setChipCount, handleHit, setIsDealersTurn, setLockedBet, setPlayersCards, setIsPlayerBusted, setRandomizedDecks, handleDealersTurn, handleEndOfGame, playerCardsRef, playerCountRef)} disabled={isDealersTurn || isHandComplete || ((lockedBet * 2)  > chipCount) }>
                                     DOUBLE
                                 </button>
                             </div>
@@ -195,7 +242,7 @@ export default function Blackjack() {
                 <BJButton setBetAmount={setBetAmount} num={5000} chipCount={chipCount} />
                 <BJButton setBetAmount={setBetAmount} num={10000} chipCount={chipCount} />
             </div>
-                <form onSubmit={(e) => handleSubmit(e, setIsDealersTurn, setIsHandComplete, setLockedBet, betAmount, setChipCount, randomizedDecks, setPlayersCards, setDealersCards, setRandomizedDecks, setBetAmount, setWinner, lockedBet)}>
+                <form onSubmit={(e) => handleSubmit(e, setIsDealersTurn, setIsHandComplete, setLockedBet, betAmount, setChipCount, randomizedDecks, setPlayersCards, setDealersCards, setRandomizedDecks, setBetAmount, setIsBlackjack, dealersCardsRef, deckRef, handleEndOfGame, playerCountRef)}>
             <div className="betControls">
                 <button disabled={!isHandComplete || previousBet < 1 || previousBet > chipCount} onClick={() => setBetAmount(() => previousBet)}>
                     SAME BET
