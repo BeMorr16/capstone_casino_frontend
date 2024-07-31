@@ -1,25 +1,50 @@
 
 .roulette-game {
-  max-width: 90%;
-  min-width: 80%;
+  width: 100%;
+  padding-left: 5rem;
+  padding-right: 5rem;
   /* margin-top: 50rem; */
   height: 100vh;
+  background: url("./assets/background-image-3.webp");
 
 }
-
+.roulette-info {
+  width: 100%;
+  padding-left: 5rem;
+  padding-right: 5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  background-color: rgb(37, 49, 85, 0.6);
+  border: 1px solid  rgba(204, 203, 203, 0.8);
+}
+.roulette-info-content {
+  width: 20rem;
+  color: white;
+  /* border-radius: 1rem; */
+  /* border: 1px solid rgba(77, 77, 77, 0.8); */
+}
 .roulette-wheel {
   float: right;
-  width: 380px;
-  height: 380px;
+  width: 480px;
+  height: 480px;
   border-radius: 100%;
   background: url("./assets/roulette_1.jpg");
-  background-size: 380px 380px;
+  background-size: 480px 480px;
   shape-outside: circle(190px);
   margin: 0 0 1em 1em;
   box-shadow: 2px 10px 30px rgba(0, 0, 0, 0.4);
-  position: relative;
+  /* position: relative; */
   touch-action: none;
   overflow: visible;
+  /* z-index: 10; */
+  position: absolute; /* Position it absolutely within the container */
+    top: 67%; /* Adjust the positioning as needed */
+    left: 22.9%; /* Adjust the positioning as needed */
+    transform: translate(-50%, -50%); /* Center the floating component */
+    background-color: rgba(255, 255, 255, 0.8); /* Adjust as needed */
+    padding: 10px; /* Adjust as needed */
+    z-index: 10; /* Ensure it floats on top */
 }
 
 @media screen and (max-width: 2640px) {
@@ -49,7 +74,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-size: 380px 380px;
+  background-size: 480px 480px;
 }
 
 .roulette-wheel .layer-2,
@@ -87,19 +112,19 @@
 
 .roulette-wheel .ball {
   position: absolute;
-  width: 14px;
-  height: 14px;
-  border-radius: 7px;
+  width: 18px;
+  height: 18px;
+  border-radius:50px;
   background: #fff radial-gradient(circle at 5px 5px, #fff, #444);
   box-shadow: 1px 1px 4px #000;
   transform: translateY(-116px);
-  top: 37%;
-  left: 50%;
+  top: 30%;
+  left: 49.5%;
   margin: -7px;
   will-change: transform;
 }
 
-.wheel-and-history {
+.board-and-history {
   display: flex;
   flex-direction: row;
 }

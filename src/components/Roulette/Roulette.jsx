@@ -188,6 +188,19 @@ const Roulette = () => {
   };
   return (
     <div className="roulette-game">
+      <div className="roulette-info">
+        <div className="roulette-info-content">{number !== null && <h2>Winning Number: {number}</h2>}</div>
+        <div className="roulette-info-content">{result !== null && <h2>Total Payout: ${result}</h2>}</div>
+        <div className="roulette-info-content">{chipCount !== null && <h2>Balance: ${chipCount}</h2>}</div>
+      </div>
+      <div className="board-and-history">
+        <Board
+          selectedChip={selectedChip}
+          placeBet={handlePlaceBet}
+          placedBets={placedBets}
+        />
+        <NumberHistory history={numberHistory} />
+      </div>
       <div className="wheel-and-history">
         <div className={"roulette-wheel"} onClick={handleSpinClick}>
           <div className={"layer-2 wheel"}></div>
@@ -198,11 +211,8 @@ const Roulette = () => {
             <div className={"ball"}></div>
           </div>
         </div>
-        <NumberHistory history={numberHistory} />
       </div>
-      {number !== null && <h2>Winning Number: {number}</h2>}
-      {result !== null && <h2>Total Payout: ${result}</h2>}
-      {chipCount !== null && <h2>Balance: ${chipCount}</h2>}
+
       <button onClick={handleSpinClick}>Spin the Wheel</button>
       <ChipsSelector
         selectedChip={selectedChip}
@@ -210,11 +220,6 @@ const Roulette = () => {
         onRepeatLastBets={handleRepeatLastBets}
         onUndoLastBet={handleUndoLastBet}
         onClearBets={handleClearBets}
-      />
-      <Board
-        selectedChip={selectedChip}
-        placeBet={handlePlaceBet}
-        placedBets={placedBets}
       />
     </div>
   );

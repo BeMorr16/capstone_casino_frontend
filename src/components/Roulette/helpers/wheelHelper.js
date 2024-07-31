@@ -75,9 +75,9 @@ export const spinWheelAnimation = (
     targets: ".ball-container",
     translateY: [
       { value: 0, duration: 1000 },
-      { value: 10, duration: 1500 },
-      { value: 20, duration: 2000 },
+      { value: 20, duration: 1500 },
       { value: 50, duration: 2000 },
+      { value: 90, duration: 2000 },
     ],
     rotate: ballEndRotation,
     duration: singleSpinDuration,

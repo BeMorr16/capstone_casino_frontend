@@ -1,8 +1,11 @@
 .number-history {
   border: 1px solid #ccc;
   padding: 10px;
-  margin-top: 20px;
-  width: 100px; 
+  margin-top: 5rem;
+  width: 8rem; 
+  height: 38rem;
+  background-color: rgb(37, 49, 85, 0.6);
+  color: white;
 }
 
 .number-history h3 {
@@ -20,7 +23,7 @@
   display: flex;
   flex-direction: column-reverse;
   align-items: center;
-  height: 360px;
+  height: 34rem;
   overflow: hidden; 
 }
 
@@ -31,17 +34,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  background-color: #fff;
-  border: 1px solid #000;
+  border-radius: 0%;
+  border: 1px solid #fdfdfd;
 }
 
 .history-item.red {
   background-color: #d44;
+  color: white;
 }
 
 .history-item.black {
   background-color: #444;
+  color: white;
+
 }
 
 .history-item.blank {
