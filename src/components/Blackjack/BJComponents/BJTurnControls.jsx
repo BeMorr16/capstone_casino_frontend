@@ -35,7 +35,6 @@ export default function BJTurnControls({
     console.log("cards", dealersCardsRef.current)
   return (
     <div className="BJTurnContainer">
-      <h3>Wager: {lockedBet}</h3>
       <div className="blackjackTurnControls">
         <button
           onClick={() =>

@@ -3,8 +3,9 @@ import "./HTPBlackjack.css";
 export default function HTPBlackjack() {
   return (
     <div className="BJ-HTP-background">
-      <div className="BJ-instructions">
-        <h1 className="BJ-Title">How to Play Blackjack</h1>
+      <div className="BJ-instructions-part1">
+        <div className="BJ-HTP-innerContainer">
+        <h1 className="BJ-Title">Blackjack:</h1>
         <p>
           Welcome to our thrilling <strong>Blackjack game!</strong> Here’s a
           comprehensive guide on how to play and aim for that <strong>21</strong>.
@@ -42,20 +43,25 @@ export default function HTPBlackjack() {
               <li><strong>Stand:</strong> Keep your current hand and end your turn.</li>
               <li><strong>Double Down:</strong> Double your initial bet and receive only one more card.</li>
             </ul>
-          </li>
-          <li>
-            <strong>Dealer&#39;s Turn:</strong> The dealer reveals their face-down card and must hit until their hand totals at least 17 points.
-          </li>
-          <li>
-            <strong>Winning Conditions:</strong>
-            <ul>
-              <li>If your hand value is closer to 21 than the dealer&#39;s without exceeding 21, you win.</li>
-              <li>If the dealer busts (goes over 21), you win.</li>
-              <li>If you bust, you lose your bet.</li>
-              <li>If you and the dealer have the same hand value, it’s a push, and your bet is returned.</li>
-            </ul>
-          </li>
-        </ol>
+            </li>
+            <li>
+              <strong>Dealer&#39;s Turn:</strong>
+              <p>The dealer reveals their face-down card and must hit until their hand totals at least 17 points.</p>
+            </li>
+          </ol>
+          </div>
+      </div>
+
+      <div className="BJ-instructions-part2">
+        <div className="BJ-HTP-innerContainer">
+
+        <h2 className="BJ-SubTitle">Winning Conditions</h2>
+        <ul>
+          <li>If your hand value is closer to 21 than the dealer&#39;s without exceeding 21, you win.</li>
+          <li>If the dealer busts (goes over 21), you win.</li>
+          <li>If you bust, you lose your bet.</li>
+          <li>If you and the dealer have the same hand value, it&#39;s a push, and your bet is returned.</li>
+        </ul>
 
         <h2 className="BJ-SubTitle">Special Hands</h2>
         <ul>
@@ -81,7 +87,8 @@ export default function HTPBlackjack() {
 
         <p>
           Get ready to test your skills, place your bets, and aim for 21 in our exciting Blackjack game. May the cards be in your favor!
-        </p>
+          </p>
+          </div>
       </div>
     </div>
   );

@@ -20,7 +20,10 @@ export default function BJUserBetControls({ chipCount, setChipCount, dealersCard
     }));
   return (
     <div className="blackjackUserControls">
-          <div className="BJButtonsContainer">
+      <div className="BJbetAmountBeforeHand">
+          {betAmount > 0 && <h3>{betAmount}</h3>}
+              </div>
+      <div className="BJButtonsContainer">
             {[5, 25, 50, 100, 500, 1000, 5000].map((amount) => {
               return  <BJButton setBetAmount={setBetAmount} key={amount} num={amount} chipCount={chipCount} />
             })}
@@ -46,10 +49,10 @@ export default function BJUserBetControls({ chipCount, setChipCount, dealersCard
               </button>
             </div>
           </form>
-          <div className="BJChipCountContainer">
+          {/* <div className="BJChipCountContainer">
             <h2 className="BJChipCountHeader">CHIPS</h2>
             <div className="BJChipCount">{chipCount - betAmount}</div>
-          </div>
+          </div> */}
         </div>
   )
 }

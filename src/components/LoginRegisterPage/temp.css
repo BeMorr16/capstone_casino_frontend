@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 
-.mainLogin {
+body {
   background: transparent;
   display: flex;
   justify-content: center;
@@ -12,24 +12,28 @@
   flex-direction: column;
   font-family: "Montserrat", sans-serif;
   color: white;
-  height: 100%;
 }
 
 .container {
   background-color: transparent;
+  border-radius: 10px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  /* position: relative; */
+  min-height: 90%;
+  /* min-width: 90%; */
+  height: 93vh;
+  /* margin: 1rem 1rem 1rem 1rem; */
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   border-radius: 15px;
-  /* box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22); */
-  height: 74%;
-  width: 80%;
-  overflow: hidden;
-  position: absolute;
+  /* max-height: 820px; */
 }
 
 .sign-up-container,
 .sign-in-container {
   position: absolute;
   top: auto;
-  height: 100%;
+  height: inherit;
   transition: all 0.6s ease-in-out;
   width: 50%;
   opacity: 0;
@@ -55,15 +59,20 @@
   transform: translateX(-80%);
   opacity: 1;
 }
+
 .form {
   background-color: rgba(33, 44, 47, 1);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  padding: 0 50px;
+  height: 100%;
   text-align: center;
   width: 80%;
-  height: 100%;
+  left: auto;
+  right: auto;
+  border: 2px solid white;
 }
 
 .form h1 {
@@ -108,7 +117,7 @@
     color: #ffffff;
     font-size: 12px;
     font-weight: bold;
-    padding: 5px 20px;
+    padding: 12px 45px;
     letter-spacing: 1px;
     text-transform: uppercase;
     transition: transform 80ms ease-in;
@@ -129,7 +138,6 @@
   margin: 15px 0;
 }
 
-
 .overlay-container {
   position: absolute;
   top: auto;
@@ -149,7 +157,7 @@
   background: rgba(33, 44, 47, 1);
   background: url('/images/login-register-img.png') no-repeat center center;
   background-repeat: no-repeat;
-  background-size: 80% ;
+  background-size: 80%;
   background-position: 0 0;
   color: #ffffff;
   position: relative;
@@ -182,12 +190,12 @@
 
 .left-overlay-panel {
   transform: translateX(-20%);
-  top: 23%;
+  top: 16%;
   right: 58%;
   /* transform: rotate(28deg); */
 }
 .right-overlay-panel{
-  top: 20%;
+  top: 15%;
   left: 36%;
 }
 
@@ -207,9 +215,7 @@
 
 .left-overlay-panel h1,
 .right-overlay-panel h1 {
-  font-size: 1rem;
-  margin: 0;
-  margin-bottom: 0;
+  font-size: 1.5rem;
 }
 
 .left-overlay-panel p,
@@ -217,9 +223,18 @@
   font-size: 14px;
   font-weight: 100;
   line-height: 20px;
-  margin: 0 0 0 0;
 }
 
+.left-overlay-panel h1,
+.right-overlay-panel h1 {
+  margin: 0;
+  margin-bottom: 0;
+}
+.left-overlay-panel p,
+.right-overlay-panel p {
+  margin: 0 0 0 0;
+  
+}
 .left-overlay-panel button,
 .right-overlay-panel button {
   margin-top: 0;

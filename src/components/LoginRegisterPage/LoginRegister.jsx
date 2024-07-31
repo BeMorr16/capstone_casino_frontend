@@ -62,6 +62,7 @@ export default function LoginRegister() {
   const toggle = () => setSignIn(!signIn);
 
   return (
+    <main className='mainLogin'>
     <div className="container">
       <div className={`sign-up-container ${!signIn ? 'active' : ''}`}>
         <form className="form" onSubmit={handleSignUpSubmit}>
@@ -70,7 +71,7 @@ export default function LoginRegister() {
           <input type='email' placeholder='Email' name='email' className="input" onChange={handleSignUpFormChange} required/>
           <input type='password' placeholder='Password' name='password' className="input" onChange={handleSignUpFormChange} required/>
           <div>
-        <input type="radio" id="mode1" name="mode" value={1} onChange={handleSignUpFormChange}/>
+        <input type="radio" id="mode1" name="mode" value={1} onChange={handleSignUpFormChange} required/>
         <label htmlFor="mode1">Easy</label>
 
         <input type="radio" id="mode2" name="mode" value={2} onChange={handleSignUpFormChange}/>
@@ -79,10 +80,10 @@ export default function LoginRegister() {
         <input type="radio" id="mode3" name="mode" value={3} onChange={handleSignUpFormChange}/>
             <label htmlFor="mode3">Hard</label>
             
-          </div>
         <input type="radio" id="mode4" name="mode" value={4} onChange={handleSignUpFormChange}/>
         <label htmlFor="mode4">Impossible</label>
-          <button className="button" disabled={signUpFormData.mode === null}>Sign Up</button>
+          </div>
+          <button className="button">Sign Up</button>
         </form>
       </div>
 
@@ -99,16 +100,17 @@ export default function LoginRegister() {
         <div className="overlay">
           <div className={`left-overlay-panel ${signIn ? 'inactive' : ''}`}>
             <h1>Welcome Back!</h1>
-            <p>Login with your personal info get your progress</p>
+            <p>Login to access your progress</p>
             <button type='button' className="ghost-button" onClick={toggle}>Sign In</button>
           </div>
           <div className={`right-overlay-panel ${signIn ? '' : 'inactive'}`}>
             <h1>Hello, Friend!</h1>
-            <p>Enter your personal details and start your journey</p>
+            <p>Enter your info to start the journey</p>
             <button type='button' className="ghost-button" onClick={toggle}>Sign Up</button>
           </div>
         </div>
       </div>
-    </div>
+      </div>
+      </main>
   );
 }

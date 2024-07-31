@@ -199,10 +199,11 @@ export default function Blackjack() {
             <p>{winner}</p>
             <p>wagered: {previousBet}</p>
           </div>
-        )}
-        <div className="BJbetAmountBeforeHand">
-          {betAmount > 0 && <h3>{betAmount}</h3>}
-              </div>
+              )}
+              <div className="BJChipCountContainer">
+            <h2 className="BJChipCountHeader">CHIPS</h2>
+            <div className="BJChipCount">{chipCount - betAmount}</div>
+          </div>
               <BJnavigations/>
       </div>
     </>
