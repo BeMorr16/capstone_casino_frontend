@@ -1,31 +1,74 @@
-/* .SLTM-HTP-background {
-    background-image: url("../Slots/assets/images/CasinoBackground.png");
-    background-size: cover;
-    background-position: center;
-    width: 100vw;
-    min-width: 320px;
-    min-height: 100vh;
-  } */
+.SLTM-HTP-background {
+  background-image: url("../Slots/assets/images/HTP-3.png");
+  background-size: cover;
+  background-position: center;
+  width: 100vw;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+.SLTM-IMG-HTP-2 {
+  width: 40%;
+  margin-right: 2%;
+  position: absolute; 
+  left: 2.5%; 
+  top: 35.5%;
+  z-index: 1;
+}
+
+.SLTM-IMG-HTP-3 {
+    width: 40%; 
+    margin-right: 2%; 
+    position: absolute; 
+    left: 59.5%; 
+    top: 35.5%;
+    z-index: 1;
+}
 
 .SLTM-instructions {
-    padding: 20px;
-    font-family: Arial, sans-serif;
-  }
-  
-  .SLTM-Tittle, .SLTM-SubTittle {
-    color: #333;
-  }
-  
-  .SLTM-instructions p, .SLTM-instructions ul {
-    font-size: 16px;
-    line-height: 1.6;
-  }
-  
-  .SLTM-instructions ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .SLTM-instructions li {
-    margin-bottom: 10px;
-  }
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+
+.SLTM-Tittle,
+.SLTM-SubTittle {
+  color: white;
+}
+
+.SLTM-instructions p,
+.SLTM-instructions ul {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.SLTM-instructions ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.SLTM-instructions li {
+  margin-bottom: 10px;
+}
+
+.SLTM-inst1 {
+  width: 30%; 
+  margin-right: 2%; 
+  position: absolute; 
+  left: 8%; 
+  top: 42%; 
+  z-index: 3;
+}
+
+.SLTM-inst2 {
+  width: 30%; 
+  position: absolute; 
+  right: 5.5%; 
+  top: 42%; 
+  z-index: 3;
+}

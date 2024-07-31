@@ -3,6 +3,8 @@
 import { useNavigate } from "react-router-dom"
 import useUserState from "../../store/store";
 import { useState } from "react";
+import "./Casino.css";
+import Arrow from "../Slots/assets/images/arrow.png";
 
 export default function Casino() {
   const navigate = useNavigate();
@@ -30,14 +32,29 @@ export default function Casino() {
   }
 
   return (
+    <div className= "Casino-background">
     <div>
       <form onSubmit={handleTCSubmit}>
       {isLoggedIn && <input type="number"  onChange={handleInputChange} placeholder="How many chips are you bringing"/>}
-      <button disabled={!tempChips && isLoggedIn} onClick={() => setDestination('/blackjack')}>Blackjack</button>
-      <button disabled={!tempChips && isLoggedIn} onClick={() => setDestination('/roulette')}>Roulette</button>
-      <button disabled={!tempChips && isLoggedIn} onClick={() => setDestination('/slots')}>Slots</button>
-      <button disabled={tempChips && isLoggedIn} onClick={() => setDestination('/warehouse')}>Warehouse</button>
+      <div className = "Casino-Blackjack">
+      <button className ="Casino-Button" disabled={!tempChips && isLoggedIn} onClick={() => setDestination('/blackjack')}></button>
+      </div>
+      <div className = "Casino-Roulette">
+      <button className ="Casino-Button" disabled={!tempChips && isLoggedIn} onClick={() => setDestination('/roulette')}></button>
+      </div>
+      <div className = "Casino-Slots">
+      <button className ="Casino-Button" disabled={!tempChips && isLoggedIn} onClick={() => setDestination('/slots')}></button>
+      </div>
+      <div className = "Casino-WareHouse">
+      <button className ="Casino-WareHouse-Button" disabled={tempChips && isLoggedIn} onClick={() => setDestination('/warehouse')}>Warehouse</button>
+      <img
+            className="Casino-WareHouse-Arrow"
+            src={Arrow}
+            alt="Slot Machine"
+          />
+      </div>
 </form>
+    </div>
     </div>
   )
 }
