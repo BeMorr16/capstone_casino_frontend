@@ -1,0 +1,69 @@
+.Casino-background {
+    background-image: url("../../components/Slots/assets/images/casino-bg.png");
+    background-size: cover;
+    background-position: center;
+    width: 100vw;
+    min-width: 320px;
+    min-height: 100vh;
+  }
+  
+  .Casino-Blackjack, .Casino-Roulette, .Casino-Slots {
+    height: 435px;
+    width: 200px;
+    margin-right: 2%;
+    position: absolute;
+    z-index: 1;
+    border-top: solid 5px transparent;
+    border-left: solid 5px transparent;
+    border-right: solid 5px transparent;
+    border-bottom: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .Casino-Blackjack {
+    left: 58.9%;
+    top: 43%;
+  }
+  
+  .Casino-Blackjack:hover, .Casino-Roulette:hover, .Casino-Slots:hover {
+    border-color: rgba(255, 174, 55, 0.600);
+    box-shadow: 0 0 15px 5px rgba(255, 174, 55, 0.75);
+  }
+  
+  .Casino-Roulette {
+    left: 45.7%;
+    top: 43%;
+  }
+  
+  .Casino-Slots {
+    left: 32.7%;
+    top: 43%;
+  }
+  
+  .Casino-Button{
+    border: none;
+    background-color: transparent;
+    height: 435px;
+    width: 200px;
+    margin-right: 2%;
+    position: absolute;
+    z-index: 1;
+  }
+
+  .Casino-WareHouse{
+    height: 40px;
+    width: 20px;
+    margin-right: 2%;
+    position: absolute;
+    z-index: 1;
+    left: 44%;
+    top: 93%;
+  }
+
+  .Casino-WareHouse-Arrow{
+    background: none;
+    border: none;
+    height: 130px;
+    width: 250px;
+    transform: rotate(90deg);
+  }
