@@ -1,7 +1,13 @@
 /* Styles for ChipSelector Component */
 
 .chips-selector {
-  margin-bottom: 20px;
+  position: absolute; /* Position it absolutely within the container */
+    top: 90%; /* Adjust the positioning as needed */
+    left: 60%; /* Adjust the positioning as needed */
+    transform: translate(-50%, -50%); /* Center the floating component */
+    background-color: rgba(255, 255, 255, 0); /* Adjust as needed */
+    padding: 10px; /* Adjust as needed */
+    z-index: 10;
 }
 
 .chip-button {
@@ -10,6 +16,7 @@
   font-size: 16px;
   cursor: pointer;
   border-radius: 50%;
+  /* background-image: url("https://www.clipartmax.com/png/middle/187-1875339_red-poker-chips-guest-book-poker-chips.png"); */
 }
 
 .chip-button.selected {

@@ -1,3 +1,5 @@
+import useUserState from "../../../store/store";
+
 const isRed = (number) => {
   const redNumbers = [
     1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36,
@@ -69,7 +71,12 @@ const calculateWinningsHelper = (number, placedBets) => {
   return { totalWinnings, betResults, totalBetAmount, totalWonAmount };
 };
 
-export const sendRouletteTransaction = (win, money, result, transactionMutation) => {
+export const sendRouletteTransaction = (
+  win,
+  money,
+  result,
+  transactionMutation
+) => {
   const transaction = {
     id: useUserState.getState().id,
     game: "roulette",
