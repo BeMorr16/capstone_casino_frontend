@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import useStore from "../BJstore/BJstore";
-import { handleDouble, handleHit, handleStand } from "../BJutils/BJgameUtils";
+import { handleDouble, handleHit, handleInsurance, handleStand } from "../BJutils/BJgameUtils";
 
 export default function BJTurnControls({
   chipCount,
@@ -9,7 +9,9 @@ export default function BJTurnControls({
   playerCountRef,
   deckRef,
   handleDealersTurn,
-  handleEndOfGame,
+    handleEndOfGame,
+    dealersCardsRef,
+    insuranceRef
 }) {
   const {
     isDealersTurn,
@@ -19,7 +21,7 @@ export default function BJTurnControls({
     setPlayersCards,
     setIsPlayerBusted,
     setRandomizedDecks,
-    setIsDealersTurn,
+      setIsDealersTurn,
   } = useStore((state) => ({
     isDealersTurn: state.isDealersTurn,
     isHandComplete: state.isHandComplete,
@@ -30,6 +32,7 @@ export default function BJTurnControls({
     setRandomizedDecks: state.setRandomizedDecks,
     setIsDealersTurn: state.setIsDealersTurn,
   }));
+    console.log("cards", dealersCardsRef.current)
   return (
     <div className="BJTurnContainer">
       <h3>Wager: {lockedBet}</h3>
@@ -79,7 +82,14 @@ export default function BJTurnControls({
           }
         >
           DOUBLE
-        </button>
+              </button>
+              {dealersCardsRef.current.length && dealersCardsRef.current[0].weight === 11 && 
+                  <button onClick={() => handleInsurance(insuranceRef, handleEndOfGame)}>
+                      INSURANCE
+                  </button>
+              }
+                  
+             
       </div>
     </div>
   );
@@ -100,6 +110,9 @@ BJTurnControls.propTypes = {
   playerCountRef: PropTypes.shape({
     current: PropTypes.number,
   }).isRequired,
+    insuranceRef: PropTypes.shape({
+      current: PropTypes.bool
+  }).isRequired,
   deckRef: PropTypes.shape({
     current: PropTypes.arrayOf(
       PropTypes.shape({
@@ -110,5 +123,12 @@ BJTurnControls.propTypes = {
     ),
   }).isRequired,
   handleDealersTurn: PropTypes.func.isRequired,
-  handleEndOfGame: PropTypes.func.isRequired,
+    handleEndOfGame: PropTypes.func.isRequired,
+    dealersCardsRef: PropTypes.shape({
+        current: PropTypes.arrayOf(
+            PropTypes.shape({
+              weight: PropTypes.number.isRequired,
+          })
+      )
+  })
 };

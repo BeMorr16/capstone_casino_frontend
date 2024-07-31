@@ -1,0 +1,40 @@
+.BJ-HTP-background {
+    background-color: #f0f0f0; /* Adjust background color as needed */
+    padding: 20px;
+    min-height: 100vh;
+  }
+  
+  .BJ-instructions {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .BJ-Title {
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .BJ-SubTitle {
+    font-size: 1.5em;
+    color: #555;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .BJ-SubTitle, .BJ-Title {
+    font-family: 'Arial', sans-serif;
+  }
+  
+  ul, ol {
+    margin-left: 20px;
+  }
+  
+  li {
+    margin-bottom: 10px;
+  }
+  

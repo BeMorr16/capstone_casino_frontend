@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./BJ.css";
 import useStore from "../BJstore/BJstore";
 import { sendTransaction } from "../BJutils/BJgameUtils";
@@ -54,7 +54,8 @@ export default function Blackjack() {
   const dealersCardsRef = useRef([]);
   const deckRef = useRef(randomizedDecks);
   const playerCountRef = useRef(0);
-  const playerCardsRef = useRef([]);
+    const playerCardsRef = useRef([]);
+    const insuranceRef = useRef(false);
   const transactionMutation = useMutation({
     mutationFn: addTransaction,
   });
@@ -71,6 +72,12 @@ export default function Blackjack() {
     }
     return 1000;
   });
+    
+    useEffect(() => {
+        if (isLoggedIn && tableChips === 0) {
+            navigate("/casino");
+        }
+    },[isLoggedIn, tableChips, navigate])
 
   function dealerHitAgain() {
     const [drawnDealerCard, ...remainingDeck] = deckRef.current;
@@ -102,14 +109,27 @@ export default function Blackjack() {
     }
   }
 
-  function handleEndOfGame() {
+    function handleEndOfGame() {
+        if (insuranceRef.current) {
+        const betInsurance = lockedBet / 2
+        setChipCount((prev) => prev + betInsurance);
+        sendTransaction(false, betInsurance, transactionMutation, insuranceRef);
+        adjustTableChips((-betInsurance))
+        resetGame();
+        dealerCountRef.current = 0;
+        dealersCardsRef.current = [];
+        playerCardsRef.current = [];
+        playerCountRef.current = 0;
+        insuranceRef.current = false;
+        return
+      }
     const playerCountToCompare = playerCountRef.current;
     const dealerCountToCompare = dealerCount > dealerCountRef.current ? dealerCount : dealerCountRef.current;
     const bet = useStore.getState().lockedBet;
     if (playerCardsRef.current.length === 2 && playerCountRef.current === 21) {
       setWinner(`Player wins ${bet * 2.5} with Blackjack!`);
       setChipCount((prev) => prev + bet * 2.5);
-      sendTransaction(true, bet * 1.5, transactionMutation);
+      sendTransaction(true, (bet * 1.5), transactionMutation);
       adjustTableChips(bet * 1.5);
     } else if (isPlayerBusted || playerCountToCompare > 21) {
       setWinner("Busted! Dealer wins");
@@ -167,7 +187,7 @@ export default function Blackjack() {
             {!isHandComplete && (
               <BJTurnControls chipCount={chipCount} setChipCount={setChipCount} playerCardsRef={playerCardsRef}
                 playerCountRef={playerCountRef} deckRef={deckRef} handleDealersTurn={handleDealersTurn}
-                handleEndOfGame={handleEndOfGame} /> )}
+                handleEndOfGame={handleEndOfGame} dealersCardsRef={dealersCardsRef} insuranceRef={insuranceRef} /> )}
           </div>
         </div>
         <BJUserBetControls chipCount={chipCount} setChipCount={setChipCount} dealersCardsRef={dealersCardsRef}

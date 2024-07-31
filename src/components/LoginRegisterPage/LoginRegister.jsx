@@ -91,7 +91,7 @@ export default function LoginRegister() {
           <h1>Sign in</h1>
           <input type='text' placeholder='Username' name='username' className="input" onChange={handleSignInFormChange} required/>
           <input type='password' placeholder='Password' name='password' className="input" onChange={handleSignInFormChange} required/>
-          <button className="button">Sign In</button>
+          {loginMutation.isPending ? <div>loading</div>: <button className="button">Sign In</button>}
         </form>
       </div>
 

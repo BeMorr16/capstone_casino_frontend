@@ -1,15 +1,25 @@
 /* Navbar.css */
 
 .Layout {
-  height: 90vh;
-  width: 100vw;
+  display: flex;
+  flex-direction: column; /* Stack children vertically */
+  min-height: 100vh;
 }
+.nav {
+  width: 100vw;
+  flex-shrink: 0;
+}
+
 
 .nav-links {
     display: flex;
     justify-content: space-around;
     background-color: blue;
-    margin-top: 0;
+    align-items: center;
+  }
+  main {
+    flex: 1; /* Takes up remaining space */
+    width: 100%; /* Full width */
   }
   
   .nav-links a {
@@ -38,7 +48,7 @@
     background-color: #f9f9f9; 
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); 
-    z-index: 1; 
+    z-index: 10000; 
   }
   
   .dropdown-content a {
@@ -59,4 +69,9 @@
   /* .dropdown:hover .dropbtn {
     background-color: darkgrey;
   } */
-  
+  footer {
+    background-color: gray; /* Change to your desired color */
+    text-align: center; /* Center text */
+    padding: 10px; /* Padding around footer */
+    width: 100%; /* Full width */
+  }

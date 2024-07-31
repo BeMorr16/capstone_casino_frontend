@@ -12,7 +12,8 @@ const useUserState = create((set) => ({
     resetUser: () => set({
         id: "",
         userMoney: 0,
-        tableChips: 0
+        tableChips: 0,
+        isLoggedIn: false
     })
 }))
 export default useUserState;

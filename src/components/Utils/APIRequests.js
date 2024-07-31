@@ -91,3 +91,22 @@ export async function moneyLeaderboardRequest() {
     console.log(error)
   }
 }
+
+
+export async function authorizeUserRequest(token) {
+  try {
+    const { data } = await axios.get("https://capstone-casino-backend.onrender.com/user", 
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}

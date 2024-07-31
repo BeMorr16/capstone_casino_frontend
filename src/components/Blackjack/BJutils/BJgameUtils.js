@@ -8,6 +8,11 @@ export function handleStand(setIsDealersTurn, handleDealersTurn) {
   setIsDealersTurn(true);
   handleDealersTurn();
 }
+
+export function handleInsurance( insuranceRef, handleEndOfGame) {
+  insuranceRef.current = true;
+  handleEndOfGame();
+}
   
   export function handleHit(playerCardsRef, deckRef, setPlayersCards, setIsPlayerBusted, setRandomizedDecks, handleEndOfGame, playerCountRef) {
     const [drawnUserCard, ...remainingDeck] = deckRef.current;
@@ -67,19 +72,23 @@ export function handleStand(setIsDealersTurn, handleDealersTurn) {
   }
   
 
-export function sendTransaction(bool, lockedBet, transactionMutation) {
+export function sendTransaction(bool, lockedBet, transactionMutation, insuranceRef = false) {
   let money;
   if (!bool && lockedBet !== 0) {
     money = lockedBet * (-1)
   } else {
     money = lockedBet
   }
+  let result = `Player: ${useStore.getState().playerCount}, Dealer: ${useStore.getState().dealerCount}`;
+  if (insuranceRef) {
+    result = "Insurance taken"
+  }
   const transaction = {
     id: useUserState.getState().id,
     game: 'blackjack',
     win_loss: bool,
     money: money,
-    result: `Player: ${useStore.getState().playerCount}, Dealer: ${useStore.getState().dealerCount}`
+    result: result
   };
   if (useUserState.getState().isLoggedIn) {
     transactionMutation.mutate(transaction)

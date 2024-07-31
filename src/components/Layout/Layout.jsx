@@ -4,15 +4,20 @@ import "./layout.css"
 import useUserState from '../../store/store'
 
 export default function Layout() {
-  const { returnChipsToTotal, isLoggedIn } = useUserState();
+  const { returnChipsToTotal, isLoggedIn, resetUser } = useUserState();
 
   function resetTableChips() {
     returnChipsToTotal();
   }
 
+  function handleLogout() {
+    resetUser();
+    window.sessionStorage.removeItem("token");
+  }
+
   return (
       <div className='Layout'>
-          <nav>
+          <nav className='nav'>
         <div className="nav-links">
           {!isLoggedIn ? (
           <Link to='/' onClick={resetTableChips}>
@@ -27,7 +32,7 @@ export default function Layout() {
           <div className="dropdown">
           <Link to="#" className="dropbtn">How to Play</Link>
           <div className="dropdown-content">
-            <Link to="/">Story</Link>
+              {isLoggedIn && <Link to="/">Story</Link>}
             <Link to="/howtoplay/blackjack" onClick={resetTableChips}>Blackjack</Link>
             <Link to="/howtoplay/roulette" onClick={resetTableChips}>Roulette</Link>
             <Link to="/howtoplay/slots" onClick={resetTableChips}>Slots</Link>
@@ -37,12 +42,14 @@ export default function Layout() {
 
           <Link to='/leaderboards' onClick={resetTableChips}>Leaderboards</Link>
           <Link to='/casino' onClick={resetTableChips}>Casino</Link>
-          <Link to='/account' onClick={resetTableChips}> Login</Link>
+          {isLoggedIn ? (<Link to='/' onClick={handleLogout}>Logout</Link>) : (<Link to='/account' onClick={resetTableChips}> Login</Link>)}
+          
         </div>  
       </nav>
       
-
-          <Outlet />
+<main>
+        <Outlet />
+        </main>
           <footer>
               foot
           </footer>
