@@ -35,26 +35,18 @@ export default function Casino() {
 
   return (
     <div className= "Casino-background">
-    <div className= "Casino-container">
-      <form onSubmit={handleTCSubmit}>
-      {isLoggedIn && <input type="number"  onChange={handleInputChange} placeholder="How many chips are you bringing"/>}
-      <div className = "Casino-Blackjack">
-      <button className ="Casino-Button" disabled={!tempChips && isLoggedIn} onClick={() => setDestination('/blackjack')}>
-      <img src={Door1} alt="Door 1" className = "Casino-Blackjack-Img"/>
-      </button>
-      </div>
-      <div className = "Casino-Roulette">
-      <button className ="Casino-Button" disabled={!tempChips && isLoggedIn} onClick={() => setDestination('/roulette')}>
-      <img src={Door2} alt="Door 2" className = "Casino-Roulette-Img"/>
-      </button>
-      </div>
-      <div className = "Casino-Slots">
-      <button className ="Casino-Button" disabled={!tempChips && isLoggedIn} onClick={() => setDestination('/slots')}>
+      <form className= "Casino-Form" onSubmit={handleTCSubmit}>
+      {isLoggedIn && <input className= "Casino-Chips" type="number"  onChange={handleInputChange} placeholder="How many chips are you bringing"/>}
+      <button className ="Casino-Button-Slots" disabled={!tempChips && isLoggedIn} onClick={() => setDestination('/slots')}>
       <img src={Door3} alt="Door 3" className = "Casino-Slots-Img"/>
       </button>
-      </div>
+      <button className ="Casino-Button-Roulette" disabled={!tempChips && isLoggedIn} onClick={() => setDestination('/roulette')}>
+      <img src={Door2} alt="Door 2" className = "Casino-Roulette-Img"/>
+      </button>
+      <button className ="Casino-Button-Blackjack" disabled={!tempChips && isLoggedIn} onClick={() => setDestination('/blackjack')}>
+      <img src={Door1} alt="Door 1" className = "Casino-Blackjack-Img" disabled={!tempChips && isLoggedIn} onClick={() => setDestination('/blackjack')}/>
+      </button>
 </form>
-    </div>
     </div>
   )
 }

@@ -337,6 +337,22 @@ const SlotMachine = () => {
             >
               50
             </button>
+            <button
+              onClick={() => setBetAmount(100)}
+              className={`SLTM-bet-amount-button ${
+                betAmount === 100 ? "selected" : ""
+              }`}
+            >
+              100
+            </button>
+            <button
+              onClick={() => setBetAmount(1000)}
+              className={`SLTM-bet-amount-button ${
+                betAmount === 1000 ? "selected" : ""
+              }`}
+            >
+              1000
+            </button>
           </div>
           <div className="SLTM-spin-button-container">
             <button
