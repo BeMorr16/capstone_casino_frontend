@@ -20,6 +20,25 @@ export async function addTransaction(transaction) {
     console.log(error);
   }
 }
+export async function addMiniGame(miniGame) {
+  try {
+    const token = window.sessionStorage.getItem("token");
+    const { data } = await axios.post(
+      "https://capstone-casino-backend.onrender.com/transaction/add",
+      miniGame,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 
 export async function registerUser(formData) {
   try {
@@ -103,7 +122,6 @@ export async function authorizeUserRequest(token) {
         },
       }
     );
-    console.log(data);
     return data;
   } catch (error) {
     console.log(error)

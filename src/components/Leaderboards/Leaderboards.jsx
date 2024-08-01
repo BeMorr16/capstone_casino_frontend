@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useQueries } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
   betLeaderboardRequest,
   moneyLeaderboardRequest,
@@ -10,45 +10,35 @@ import "./leaderboards.css";
 export default function Leaderboards() {
   const [activeTab, setActiveTab] = useState("bet");
 
-  const queries = [
-    {
-      queryKey: ["bet"],
-      queryFn: betLeaderboardRequest,
-    },
-    {
-      queryKey: ["record"],
-      queryFn: recordLeaderboardRequest,
-    },
-    {
-      queryKey: ["money"],
-      queryFn: moneyLeaderboardRequest,
-    },
-  ];
+  const {
+    data: betLeaderboard,
+    isLoading: isLoadingBetLeaderboard,
+    error: errorBetLeaderboard,
+  } = useQuery({
+    queryKey: ["bet"],
+    queryFn: betLeaderboardRequest
+  });
 
-  const results = useQueries({ queries });
+  const {
+    data: recordLeaderboard,
+    // isLoading: isLoadingRecordLeaderboard,
+    error: errorRecordLeaderboard,
+  } = useQuery({
+    queryKey: ["record"],
+    queryFn: recordLeaderboardRequest
+  });
 
-  const [
-    {
-      data: betLeaderboard,
-      isLoading: isLoadingBetLeaderboard,
-      error: errorBetLeaderboard,
-    },
-    {
-      data: recordLeaderboard,
-      isLoading: isLoadingRecordLeaderboard,
-      error: errorRecordLeaderboard,
-    },
-    {
-      data: moneyLeaderboard,
-      isLoading: isLoadingMoneyLeaderboard,
-      error: errorMoneyLeaderboard,
-    },
-  ] = results;
+  const {
+    data: moneyLeaderboard,
+    // isLoading: isLoadingMoneyLeaderboard,
+    error: errorMoneyLeaderboard,
+  } = useQuery({
+    queryKey: ["money"],
+    queryFn: moneyLeaderboardRequest,
+  });
 
   if (
-    isLoadingBetLeaderboard ||
-    isLoadingRecordLeaderboard ||
-    isLoadingMoneyLeaderboard
+    isLoadingBetLeaderboard
   ) {
     return <div>Loading leaderboards...</div>;
   }

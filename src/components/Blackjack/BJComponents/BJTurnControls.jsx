@@ -11,7 +11,8 @@ export default function BJTurnControls({
   handleDealersTurn,
     handleEndOfGame,
     dealersCardsRef,
-    insuranceRef
+  insuranceRef,
+  setShowInsuranceResult
 }) {
   const {
     isDealersTurn,
@@ -32,7 +33,6 @@ export default function BJTurnControls({
     setRandomizedDecks: state.setRandomizedDecks,
     setIsDealersTurn: state.setIsDealersTurn,
   }));
-    console.log("cards", dealersCardsRef.current)
   return (
     <div className="BJTurnContainer">
       <div className="blackjackTurnControls">
@@ -77,13 +77,13 @@ export default function BJTurnControls({
             )
           }
           disabled={
-            isDealersTurn || isHandComplete || lockedBet * 2 > chipCount
+            isDealersTurn || isHandComplete || lockedBet > chipCount
           }
         >
           DOUBLE
               </button>
               {dealersCardsRef.current.length && dealersCardsRef.current[0].weight === 11 && 
-                  <button onClick={() => handleInsurance(insuranceRef, handleEndOfGame)}>
+                  <button disabled={chipCount < lockedBet / 2} onClick={() => handleInsurance(insuranceRef, setShowInsuranceResult, handleDealersTurn, setIsDealersTurn)}>
                       INSURANCE
                   </button>
               }
@@ -122,6 +122,7 @@ BJTurnControls.propTypes = {
     ),
   }).isRequired,
   handleDealersTurn: PropTypes.func.isRequired,
+  setShowInsuranceResult: PropTypes.func.isRequired,
     handleEndOfGame: PropTypes.func.isRequired,
     dealersCardsRef: PropTypes.shape({
         current: PropTypes.arrayOf(

@@ -69,25 +69,24 @@ export default function HTPBlackjack() {
           <li><strong>Insurance:</strong> If the dealer&#39;s face-up card is an Ace, you can take insurance, a side bet that the dealer has Blackjack. Insurance pays 2:1 if the dealer has Blackjack.</li>
         </ul>
 
+        <h2 className="BJ-SubTitle">Perfect Pair</h2>
+<p>
+  In Blackjack, a Perfect Pair is a special side bet that rewards you for getting matching pairs of cards. There are three types of pairs:
+</p>
+<ul>
+  <li><strong>Perfect Match</strong>: Both cards have the same value and suit, earning the highest payout of <strong>25x</strong>.</li>
+  <li><strong>Coloured Pair</strong>: The cards have the same value but different suits, where one card is a club or spade and the other is a heart or diamond, earning a payout of <strong>12x</strong>.</li>
+  <li><strong>Mixed Pair</strong>: The cards have the same value but different suits, such as a heart and a diamond or a club and a spade, earning a payout of <strong>6x</strong>.</li>
+</ul>
+<p>
+  Make sure to place your side bets strategically and aim for the best pairs to maximize your winnings. Good luck!
+</p>
         <h2 className="BJ-SubTitle">Strategy</h2>
         <ul>
           <li><strong>Basic Strategy:</strong> Use a basic strategy chart to make the statistically best decisions based on your hand and the dealer&#39;s up card.</li>
           <li><strong>Card Counting:</strong> An advanced technique to track the ratio of high to low cards remaining in the deck. This can influence your betting and playing decisions, but be cautious as it’s not always permitted.</li>
         </ul>
 
-        <h2 className="BJ-SubTitle">Doubling</h2>
-        <p>
-          <strong>Double Down:</strong> Double your bet and receive one more card.
-        </p>
-
-        <h2 className="BJ-SubTitle">Jackpot</h2>
-        <p>
-          If you achieve a winning streak of five consecutive wins, you hit the jackpot! The jackpot starts at <strong>$10,000</strong> and increases with each subsequent win.
-        </p>
-
-        <p>
-          Get ready to test your skills, place your bets, and aim for 21 in our exciting Blackjack game. May the cards be in your favor!
-          </p>
           </div>
       </div>
     </div>

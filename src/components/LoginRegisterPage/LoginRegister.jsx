@@ -40,7 +40,7 @@ export default function LoginRegister() {
     const { name, value } = e.target;
     setSignUpFormData((prev) => ({
       ...prev,
-      [name]: name === "mode" ? parseInt(value) : value
+      [name]: value
     }));
   }
   
@@ -63,6 +63,7 @@ export default function LoginRegister() {
 
   return (
     <main className='mainLogin'>
+      <div className='background'></div>
     <div className="container">
       <div className={`sign-up-container ${!signIn ? 'active' : ''}`}>
         <form className="form" onSubmit={handleSignUpSubmit}>
@@ -70,19 +71,6 @@ export default function LoginRegister() {
           <input type='text' placeholder='Username' name='username' className="input" onChange={handleSignUpFormChange} required/>
           <input type='email' placeholder='Email' name='email' className="input" onChange={handleSignUpFormChange} required/>
           <input type='password' placeholder='Password' name='password' className="input" onChange={handleSignUpFormChange} required/>
-          <div>
-        <input type="radio" id="mode1" name="mode" value={1} onChange={handleSignUpFormChange} required/>
-        <label htmlFor="mode1">Easy</label>
-
-        <input type="radio" id="mode2" name="mode" value={2} onChange={handleSignUpFormChange}/>
-        <label htmlFor="mode2">Medium</label>
-
-        <input type="radio" id="mode3" name="mode" value={3} onChange={handleSignUpFormChange}/>
-            <label htmlFor="mode3">Hard</label>
-            
-        <input type="radio" id="mode4" name="mode" value={4} onChange={handleSignUpFormChange}/>
-        <label htmlFor="mode4">Impossible</label>
-          </div>
           <button className="button">Sign Up</button>
         </form>
       </div>
@@ -105,7 +93,7 @@ export default function LoginRegister() {
           </div>
           <div className={`right-overlay-panel ${signIn ? '' : 'inactive'}`}>
             <h1>Hello, Friend!</h1>
-            <p>Enter your info to start the journey</p>
+            <p>Start your journey</p>
             <button type='button' className="ghost-button" onClick={toggle}>Sign Up</button>
           </div>
         </div>

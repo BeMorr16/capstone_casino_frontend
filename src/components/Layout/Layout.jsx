@@ -24,8 +24,8 @@ export default function Layout() {
           Home
             </Link> 
           ) : (
-              <Link to='/warehouse' onClick={resetTableChips}>
-                Warehouse
+              <Link to='/bank' onClick={resetTableChips}>
+                Bank
               </Link>
           )}
 
