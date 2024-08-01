@@ -1,108 +1,105 @@
 
 .BJ-HTP-background {
-  background-image: url("/images/HTP-BlackJack.png");
+  background-image: url("../Slots/assets/images/HTP-3-BJ.png");
   background-size: cover;
   background-position: center;
   width: 100vw;
   min-width: 320px;
-  min-height: 120vh;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 12rem;
+  min-height: 100vh;
 }
 
-.BJ-instructions-part1,
-.BJ-instructions-part2 {
-  width: 40vw;
-  height: 70vh;
-  position: absolute;
-  top: 20%;
-  z-index: 1;
-  background: url('/images/HTP-2.png') no-repeat center;
-  background-size: 90%;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  box-sizing: border-box;
-  min-height: 55vh;
-  min-width: 20vw;
+.BJ-IMG-HTP-2 {
+    width: 40vw;
+    height: 70vh;
+    margin-right: 2%;
+    position: absolute; 
+    left: 2.5%; 
+    top: 31%;
+    z-index: 1;
 }
 
-.BJ-instructions-part1 {
-  left: 2.5%;
+.BJ-IMG-HTP-3 {
+    width: 40vw;
+    height: 70vh; 
+    margin-right: 2%; 
+    position: absolute; 
+    left: 57.5%; 
+    top: 31%;
+    z-index: 1;
 }
 
-.BJ-instructions-part2 {
-  left: 57.5%;
+.BJ-instructions {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
 }
 
-.BJ-HTP-innerContainer {
-  width: 32vw;
-  /* height: 55vh; */
-  max-height: 55vh;
-  overflow-y: scroll;
-  margin-right: 2%;
-  margin-left: 5%;
-  margin-top: 5%;
-  margin-bottom: 10%;
-  position: absolute;
-  z-index: 3;
-  padding: 20px;
-  box-sizing: border-box;
-  border-radius: 8px;
-  height: inherit;
-}
-
-.BJ-instructions-part1 .BJ-HTP-innerContainer {
-  left: 6%;
-}
-
-.BJ-instructions-part2 .BJ-HTP-innerContainer {
-  right: 6.2%;
-}
-
-.BJ-Title,
-.BJ-SubTitle {
+.BJ-Tittle,
+.BJ-SubTittle {
   color: white;
 }
 
-.BJ-instructions-part1 p,
-.BJ-instructions-part1 ul,
-.BJ-instructions-part2 p,
-.BJ-instructions-part2 ul {
+.BJ-instructions p,
+.BJ-instructions ul {
   font-size: 16px;
   line-height: 1.6;
 }
 
-.BJ-instructions-part1 ul,
-.BJ-instructions-part2 ul {
+.BJ-instructions ul {
   list-style-type: none;
   padding: 0;
 }
 
-.BJ-instructions-part1 li,
-.BJ-instructions-part2 li {
+.BJ-instructions li {
   margin-bottom: 10px;
 }
 
+.BJ-inst1 {
+    width: 32vw;
+    overflow-y: scroll; 
+    height: 60vh;
+    margin-right: 2%; 
+    position: absolute; 
+    left: 6%; 
+    top: 36%; 
+    z-index: 3;
+}
+
+.BJ-inst2 {
+    width: 32vw;
+    overflow-y: scroll; 
+    height: 60vh;
+    position: absolute; 
+    right: 6.2%; 
+    top: 36%; 
+    z-index: 3;
+}
+
 /* Scrollbar Styles */
-.BJ-HTP-innerContainer::-webkit-scrollbar {
+.BJ-inst1::-webkit-scrollbar,
+.BJ-inst2::-webkit-scrollbar {
   width: 12px;
 }
 
-.BJ-HTP-innerContainer::-webkit-scrollbar-track {
+.BJ-inst1::-webkit-scrollbar-track,
+.BJ-inst2::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0.3);
   border-radius: 10px;
 }
 
-.BJ-HTP-innerContainer::-webkit-scrollbar-thumb {
+.BJ-inst1::-webkit-scrollbar-thumb,
+.BJ-inst2::-webkit-scrollbar-thumb {
   background-color: rgba(251, 237, 158, 0.8); /* Gold color */
   border-radius: 10px;
 }
 
-.BJ-HTP-innerContainer::-webkit-scrollbar-thumb:hover {
+.BJ-inst1::-webkit-scrollbar-thumb:hover,
+.BJ-inst2::-webkit-scrollbar-thumb:hover {
   background-color: rgba(189, 127, 50, 1); /* Brighten on hover */
   border-color: rgba(255, 174, 55, 0.600);
   box-shadow: 0 1px 15px 5px rgba(255, 174, 55, 0.75);

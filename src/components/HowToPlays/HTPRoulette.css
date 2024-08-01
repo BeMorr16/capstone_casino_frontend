@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
 
 .RLT-HTP-background {
-  background-image: url("../Roulette/assets/HTP-Roullette.png");
+  background-image: url("../Slots/assets/images/HTP-3-Roulette.png");
   background-size: cover;
   background-position: center;
   width: 100vw;
   min-width: 320px;
-  min-height: 120vh;
+  min-height: 100vh;
 }
 
 .RLT-IMG-HTP-2 {
@@ -15,7 +15,7 @@
   margin-right: 2%;
   position: absolute; 
   left: 2.5%; 
-  top: 20%;
+  top: 31%;
   z-index: 1;
 }
 
@@ -25,7 +25,7 @@
   margin-right: 2%; 
   position: absolute; 
   left: 57.5%; 
-  top: 20%;
+  top: 31%;
   z-index: 1;
 }
 
@@ -67,7 +67,7 @@
   margin-right: 2%; 
   position: absolute; 
   left: 6%; 
-  top: 25%; 
+  top: 36%; 
   z-index: 3;
 }
 
@@ -77,7 +77,7 @@
   height: 60vh;
   position: absolute; 
   right: 6.2%; 
-  top: 25%; 
+  top: 36%; 
   z-index: 3;
 }
 

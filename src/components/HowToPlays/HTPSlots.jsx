@@ -7,12 +7,12 @@ export default function HTPSlots() {
     <div className="SLTM-HTP-background">
       <div className="SLTM-instructions">
         <div className="SLTM-inst1">
-          {/* <h1 className="SLTM-Tittle">How to Play the Slot Machine Game</h1>
+          <h1 className="SLTM-Tittle">How to Play the Slot Machine Game</h1>
           <p>
             Welcome to our exciting <strong>Slot Machine game!</strong> Here’s a
             simple guide on how to play and potentially <strong>win big</strong>
             .
-          </p> */}
+          </p>
           <h2 className="SLTM-SubTittle">Game Icons and Multipliers</h2>
           <p>
             Our game features seven different icons, each acting as a multiplier
@@ -53,6 +53,7 @@ export default function HTPSlots() {
             src={HTP}
             alt="Slot Machine"
           />
+
         <div className="SLTM-inst2">
           <h2 className="SLTM-SubTittle">Selected Bets</h2>
           <p>

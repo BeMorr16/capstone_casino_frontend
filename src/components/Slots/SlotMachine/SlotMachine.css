@@ -1,5 +1,5 @@
 .SLTM-slot-machine-background {
-  background-image: url("../assets/images/CasinoBackground.png");
+  background-image: url("../assets/images/SLTM-background.png");
   background-size: cover;
   background-position: center;
   width: 100vw;
@@ -26,6 +26,7 @@
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  transform: scale(0.9) translateY(-10%);
 }
 
 .SLTM-Blankspace {
@@ -328,9 +329,11 @@
   }
 
   .SLTM-reel {
-    font-size: 2.5em;
+    font-size: 2.3em;
     width: 30px;
     height: 90px;
+    margin-right: 15px;
+    margin-left: 17px;
   }
 
   .SLTM-spin-button {
@@ -366,6 +369,8 @@
     font-size: 2em;
     width: 20px;
     height: 90px;
+    margin-right: 10px;
+    margin-left: 10px;
   }
 
   .SLTM-spin-button {
