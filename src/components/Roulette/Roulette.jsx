@@ -193,16 +193,13 @@ const Roulette = () => {
         <div className="roulette-info-content">{result !== null && <h2>Total Payout: ${result}</h2>}</div>
         <div className="roulette-info-content">{chipCount !== null && <h2>Balance: ${chipCount}</h2>}</div>
       </div>
-      <div className="board-and-history">
+      <div className="board">
         <Board
           selectedChip={selectedChip}
           placeBet={handlePlaceBet}
           placedBets={placedBets}
         />
-        <NumberHistory history={numberHistory} />
-      </div>
-      <div className="wheel-and-history">
-        <div className={"roulette-wheel"} onClick={handleSpinClick}>
+         <div className={"roulette-wheel"} onClick={handleSpinClick}>
           <div className={"layer-2 wheel"}></div>
           <div className={"layer-3"}></div>
           <div className={"layer-4 wheel"}></div>
@@ -211,6 +208,10 @@ const Roulette = () => {
             <div className={"ball"}></div>
           </div>
         </div>
+        {/* <NumberHistory history={numberHistory} /> */}
+      </div>
+      <div className="wheel-and-history">
+       
       </div>
 
       <button onClick={handleSpinClick}>Spin the Wheel</button>
