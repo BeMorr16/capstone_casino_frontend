@@ -1,30 +1,31 @@
 .board-container {
   position: relative;
-  width: 105rem; /* Adjust to your needs */
-  height: 80vh; /* Adjust to your needs */
-  background-image: url("../assets/roulette-table.png"); /* Path to your board image */
+  width: 1500px; /* Adjust to your needs */
+  height: 700px; /* Adjust to your needs */
+  
+  background-image: url("../assets/roulette-table-green.png");
   background-size: contain; /* Ensure the image fits without stretching */
   background-position: center top; /* Adjust based on your needs */
   background-repeat: no-repeat; /* No repeat */
-  /* border: 2px solid yellow;  */
+  border: 1px solid yellow;
 }
 
 .outer-grid {
   display: grid;
   grid-template-columns: 55px repeat(26, 26.9px) 55px; /* Zero cell + 26 columns for bets + extra column */
   grid-template-rows: auto auto; /* Top row, middle row, bottom row */
-  /* gap: 1px; */
-  width: 55rem; /* Calculate the width based on cell sizes */
+
+  width: 880px; /* Calculate the width based on cell sizes */
   position: absolute; /* Position the grid absolutely within the container */
-  top: 17.8rem; 
-  left: 67.35%;
-  transform: translateX(-50%); /* Center the grid horizontally */
-  /* border: 2px solid yellow;  */
+  top: 271.1px; /* Adjust based on your needs */
+  left: 1037.4px;
+  transform: translateX(-50%); 
+  border: 1px solid yellow;
 }
 
 .top-row {
   display: grid;
-  grid-template-columns: 55px repeat(26, 26.9px) 55px; /* Zero cell + 26 columns for bets + extra column */
+  grid-template-columns: 55px repeat(26, 25.23px) 55px; /* Zero cell + 26 columns for bets + extra column */
   gap: 0px;
   grid-column: 1 / -1; /* Span all columns */
   grid-row: 1; /* First row */
@@ -33,8 +34,8 @@
 
 .middle-column {
   display: grid;
-  grid-template-columns: repeat(26, 1.63rem); /* 26 columns */
-  grid-template-rows: repeat(6, 2.1rem); /* 6 rows */
+  grid-template-columns: repeat(26, 25.23px); /* 26 columns */
+  grid-template-rows: repeat(6, 33px); /* 6 rows */
   gap: 0px;
   grid-column: 2 / span 26; /* Middle columns */
   grid-row: 2; /* Second row */
@@ -43,10 +44,10 @@
 
 .bottom-row {
   display: grid;
-  grid-template-rows: 2.8rem 4.4rem; /* 2 rows: one for dozens, one for other bets */
+  grid-template-rows: 50px 64px; /* 2 rows: one for dozens, one for other bets */
   gap: 0px;
   left: 0.95rem;
-  width: 37.85rem;
+  width: 600px;
   grid-column: 2 / span 26; /* Middle columns */
   grid-row: 3; /* Third row */
   position: relative; /* Ensure positioning within the outer grid */
@@ -54,14 +55,13 @@
 
 .bottom-row-top {
   display: grid;
-  grid-template-columns: repeat(3, 12.98rem); /* 3 columns for top, 6 for bottom */
-  gap: 0px;
+  grid-template-columns: repeat(3, 1fr); /* 3 columns for top, 6 for bottom */
+
 }
 
 .bottom-row-bottom {
   display: grid;
   grid-template-columns: repeat(6, 1fr); /* 3 columns for top, 6 for bottom */
-  gap: 0px;
 }
 
 .cell,
@@ -74,8 +74,9 @@
   /* border: 1px solid #000; */
   box-sizing: border-box;
   background-color: transparent; /* Transparent background */
-  position: relative; /* Ensure absolute positioning of chips */
-  /* border: 2px solid yellow;  */
+  position: relative;
+  border: 1px solid yellow;
+  gap: 0px;
 }
 
 .zero-cell {
@@ -83,14 +84,13 @@
   grid-row: 1 / span 3; /* Span three rows */
   background-color: transparent;
   width: 3.5rem;
-  height: 13.3rem; /* 6 rows of 34px height + 2 gaps of 1px */
-  /* border: 2px solid yellow;  */
+  height: 11rem; /* 6 rows of 34px height + 2 gaps of 1px */
 }
 
 .number,
 .split,
 .corner {
-  width: 1.8rem;
+  width: 25.23px;
   height: 2.2rem;
 }
 
@@ -100,11 +100,16 @@
 }
 
 .chip {
-  background-color: blue;
-  color: white;
+  background-image: url(../assets/Chip-darkblue.png);
+  background-size: contain; /* Ensure the image fits without stretching */
+  background-position: center top; /* Adjust based on your needs */
+  background-repeat: no-repeat; /* No repeat */
+  color: rgb(0, 0, 0);
+  font-size: smaller;
+  font-weight: bold;
   border-radius: 50%;
-  width: 20px;
-  height: 20px;
+  width: 35px;
+  height: 35px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -112,4 +117,41 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%); /* Center the chip */
+}
+
+/* Media Queries for Scaling */
+@media screen and (max-width: 1600px) {
+  .board-container {
+    transform: scale(.9);
+  }
+  
+  
+}
+
+@media screen and (max-width: 1400px) {
+  .board-container {
+    transform: scale(0.8);
+  }
+  
+}
+
+@media screen and (max-width: 1200px) {
+  .board-container {
+    transform: scale(0.7);
+  }
+  
+}
+
+@media screen and (max-width: 1000px) {
+  .board-container {
+    transform: scale(0.6);
+  }
+  
+}
+
+@media screen and (max-width: 800px) {
+  .board-container {
+    transform: scale(0.5);
+  }
+  
 }
