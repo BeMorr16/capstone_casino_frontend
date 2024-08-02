@@ -28,7 +28,7 @@ const SlotMachine = () => {
   const winAudio = new Audio(winSound);
   const loseAudio = new Audio(loseSound);
   const coinAudio = new Audio(coinSound);
-  const { id, isLoggedIn, tableChips, userMoney, adjustTableChips } =
+  const { id, isLoggedIn, tableChips, userMoney, adjustTableChips, returnChipsToTotal} =
     useUserState();
 
   const [chipCount, setChipCount] = useState(() => {
@@ -240,24 +240,39 @@ const SlotMachine = () => {
 
   console.log(userMoney, tableChips);
 
+//return your money when you go back to the casino page
+
+  function handleToCasino() {
+      returnChipsToTotal();
+      navigate("/casino");
+    }
+  
+    function handleToBlackjack() {
+      navigate("/blackjack");
+    }
+  
+    function handleToRoulette() {
+      navigate("/roulette");
+    }
+
   return (
     <div className="SLTM-slot-machine-background">
       <div className="SLTM-buttons-container">
         <button
           className="SLTMtoBlackJackButton"
-          onClick={() => navigate("/blackjack")}
+          onClick={handleToBlackjack}
         >
           To BlackJack
         </button>
         <button
           className="SLTMtoCasinoFloorButton"
-          onClick={() => navigate("/casino")}
+          onClick={handleToCasino}
         >
           Back to Casino Floor
         </button>
         <button
-          className="SLTMtoRouletteButton"
-          onClick={() => navigate("/roulette")}
+          className="SLTMtoRouletteButton" 
+          onClick={handleToRoulette}
         >
           To Roulette
         </button>
