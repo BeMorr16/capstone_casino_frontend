@@ -1,5 +1,5 @@
 // import React from 'react'
-import './bank.css'
+import './cashier.css'
 import UserHistory from './UserHistory';
 import UserInfo from "./UserInfo";
 import UserStats from './UserStats';
@@ -8,7 +8,7 @@ import UserStats from './UserStats';
 
 
 //getUSerInfo Request(In utils)
-export default function Bank() {
+export default function Cashier() {
 
   return (
     <>

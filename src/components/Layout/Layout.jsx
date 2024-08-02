@@ -30,8 +30,8 @@ export default function Layout() {
           Home
             </Link> 
           ) : (
-              <Link to='/bank' onClick={resetTableChips}>
-                Bank
+              <Link to='/cashier' onClick={resetTableChips}>
+                Cashier
               </Link>
           )}
 

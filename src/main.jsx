@@ -14,7 +14,7 @@ import HowToPlay from "./components/HowToPlays/HowToPlay.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import useUserState from "./store/store.js";
 import { authorizeUserRequest } from "./components/Utils/APIRequests.js";
-import Bank from "./components/Bank/Bank.jsx";
+import Cashier from "./components/Cashier/Cashier.jsx";
 
 
 const Blackjack = lazy(() => import('./components/Blackjack/BJComponents/Blackjack.jsx'));
@@ -34,10 +34,10 @@ const router = createBrowserRouter([
       { path: '/roulette', element: <Roulette/> },
       { path: '/blackjack', element: <Blackjack/> },
       {
-        path: '/bank',
+        path: '/cashier',
         element: (
           <ProtectedRoute>
-            <Bank/>
+            <Cashier/>
           </ProtectedRoute>
         )
       }
