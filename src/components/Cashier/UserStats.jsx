@@ -48,7 +48,9 @@ export default function UserStats() {
     
 
     return (
-        <div className="user-stats">
+      <div className="user-stats">
+      <h2 className="Cashier-User-Stats">User Stats</h2>
+        <div className="user-stats-content">
       <div className="stat-section total">
         <h3>Total</h3>
         <p>Bets: {totalGames}</p>
@@ -86,6 +88,7 @@ export default function UserStats() {
         <p>Average Win: ${getAverage(slotWinMoney, slotWins)}</p>
         <p>Average Loss: ${getAverage(slotLossMoney, slotLosses)}</p>
       </div>
+    </div>
     </div>
     )
 }

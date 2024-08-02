@@ -21,7 +21,7 @@ export default function Layout() {
         <div className="nav-links">
         {isLoggedIn && (
             <div className="nav-user-info">
-              <span>{username}</span>
+              <span>{username}: </span>
               <span>${userMoney}</span>
             </div>
           )}
@@ -56,9 +56,6 @@ export default function Layout() {
 <main>
         <Outlet />
         </main>
-          <footer>
-              foot
-          </footer>
     </div>
   )
 }
