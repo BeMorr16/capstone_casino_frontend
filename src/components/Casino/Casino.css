@@ -65,27 +65,27 @@
 
   .Casino-Chips {
     position: absolute;
-    bottom: -50px; /* Adjust this value as needed */
+    bottom: -50px; 
     left: 50%;
     transform: translateX(-50%);
-    padding: 10px 20px; /* Adjust padding for desired size */
-    font-family: 'Times New Roman', serif; /* Vintage font style */
-    font-size: 18px; /* Adjust font size for readability */
-    font-weight: bold; /* Make text bold */
-    color: #fff; /* White text color */
-    background-color: #2c2c2c; /* Dark red background color */
-    border: 3px solid  #b8860b; /* Gold border */
-    border-radius: 8px; /* Rounded corners */
-    text-shadow: 1px 1px 2px #000; /* Black text shadow for depth */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Soft shadow for depth */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: all 0.3s ease; /* Smooth transition for hover effects */
+    padding: 10px 20px; 
+    font-family: 'Times New Roman', serif; 
+    font-size: 18px; 
+    font-weight: bold; 
+    color: #fff; 
+    background-color: #2c2c2c;
+    border: 3px solid  #b8860b; 
+    border-radius: 8px; 
+    text-shadow: 1px 1px 2px #000; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); 
+    cursor: pointer; 
+    transition: all 0.3s ease; 
   }
   
   .Casino-Chips:hover {
-    background-color: #2c2c2c; /* Lighter red on hover */
-    border-color: #ffdead; /* Lighter gold on hover */
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.7); /* Darker shadow on hover */
+    background-color: #2c2c2c; 
+    border-color: rgba(255, 174, 55, 0.6);
+    box-shadow: 0 0 15px 5px rgba(255, 174, 55, 0.75);
   }
   
 

@@ -4,7 +4,7 @@ import "./layout.css"
 import useUserState from '../../store/store'
 
 export default function Layout() {
-  const { returnChipsToTotal, isLoggedIn, resetUser } = useUserState();
+  const { returnChipsToTotal, isLoggedIn, resetUser,  username, userMoney } = useUserState();
 
   function resetTableChips() {
     returnChipsToTotal();
@@ -19,6 +19,12 @@ export default function Layout() {
       <div className='Layout'>
           <nav className='nav'>
         <div className="nav-links">
+        {isLoggedIn && (
+            <div className="nav-user-info">
+              <span>{username}</span>
+              <span>${userMoney}</span>
+            </div>
+          )}
           {!isLoggedIn ? (
           <Link to='/' onClick={resetTableChips}>
           Home
@@ -43,7 +49,7 @@ export default function Layout() {
           <Link to='/leaderboards' onClick={resetTableChips}>Leaderboards</Link>
           <Link to='/casino' onClick={resetTableChips}>Casino</Link>
           {isLoggedIn ? (<Link to='/' onClick={handleLogout}>Logout</Link>) : (<Link to='/account' onClick={resetTableChips}> Login</Link>)}
-          
+
         </div>  
       </nav>
       
