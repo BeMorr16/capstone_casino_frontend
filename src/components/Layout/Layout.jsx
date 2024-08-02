@@ -32,7 +32,7 @@ export default function Layout() {
           <div className="dropdown">
           <Link to="#" className="dropbtn">How to Play</Link>
           <div className="dropdown-content">
-              {isLoggedIn && <Link to="/">Story</Link>}
+              {isLoggedIn && <Link to="/">Welcome</Link>}
             <Link to="/howtoplay/blackjack" onClick={resetTableChips}>Blackjack</Link>
             <Link to="/howtoplay/roulette" onClick={resetTableChips}>Roulette</Link>
             <Link to="/howtoplay/slots" onClick={resetTableChips}>Slots</Link>

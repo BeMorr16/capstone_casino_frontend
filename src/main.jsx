@@ -57,17 +57,17 @@ function App() {
     const token = window.sessionStorage.getItem("token");
     if (token) {
       (async () => {
-        const data = await authUser(token);
+        const data = await authUser();
         if (data) {
-          setUser(data.id, data.user_money);
+          setUser(data.id, data.user_money, data.username);
           setIsLoggedIn(true);
         }
       })();
     }
 
-    async function authUser(token) {
+    async function authUser() {
       try {
-        const data = await authorizeUserRequest(token);
+        const data = await authorizeUserRequest();
         return data
       } catch (error) {
         console.log(error)

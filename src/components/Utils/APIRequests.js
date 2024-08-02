@@ -48,8 +48,8 @@ export async function registerUser(formData) {
     );
     if (data.token) {
         window.sessionStorage.setItem("token", data.token);
-        const { id, user_money } = data;
-      useUserState.getState().setUser(id, user_money);
+        const { id, user_money, username } = data;
+      useUserState.getState().setUser(id, user_money, username);
       useUserState.getState().setIsLoggedIn(true);
     }
     return data;
@@ -67,8 +67,8 @@ export async function loginUser(formData) {
       );
     if (data.token) {
         window.sessionStorage.setItem("token", data.token);
-        const { id, user_money } = data;
-      useUserState.getState().setUser(id, user_money);
+        const { id, user_money, username } = data;
+      useUserState.getState().setUser(id, user_money, username);
       useUserState.getState().setIsLoggedIn(true);
     }
     return data;
@@ -112,8 +112,9 @@ export async function moneyLeaderboardRequest() {
 }
 
 
-export async function authorizeUserRequest(token) {
+export async function authorizeUserRequest() {
   try {
+    const token = window.sessionStorage.getItem("token");
     const { data } = await axios.get("https://capstone-casino-backend.onrender.com/user", 
       {
         headers: {
@@ -127,4 +128,40 @@ export async function authorizeUserRequest(token) {
     console.log(error)
     throw error
   }
+}
+export async function editUserRequest(user) {
+  try {
+    const token = window.sessionStorage.getItem("token");
+    const { data } = await axios.put("https://capstone-casino-backend.onrender.com/user/edit",
+    user,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export async function getUserBetSlipsRequest(gameSelection, winOrLoss) {
+  try {
+    const url = `https://capstone-casino-backend.onrender.com/transaction/history/${gameSelection}/${winOrLoss}`;
+    const token = window.sessionStorage.getItem("token");
+    const { data } = await axios.get(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return data
+  } catch (error) {
+    console.error('Error fetching user bet slips:', error);
+    throw new Error('Failed to fetch user bet slips');
+  }
+  
 }

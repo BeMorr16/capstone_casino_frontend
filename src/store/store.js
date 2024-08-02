@@ -1,12 +1,13 @@
 import { create } from "zustand";
 const useUserState = create((set) => ({
     id: "",
+    username: "",
     userMoney: 0,
     tableChips: 0,
     isLoggedIn: false,
     isMiniGame: false,
     betsRemaining: 10,
-    setUser: (id, money) => set({ id: id, userMoney: money }),
+    setUser: (id, money, username) => set({ id: id, userMoney: money, username: username }),
     setUserMoney: (updateFn) => set((state) => ({userMoney: updateFn(state.userMoney)})),
     setTableChips: (chips) => set((state) => ({ userMoney: state.userMoney - chips, tableChips: chips })),
     adjustTableChips: (chips) => set((state) => ({ tableChips: state.tableChips + chips })),
