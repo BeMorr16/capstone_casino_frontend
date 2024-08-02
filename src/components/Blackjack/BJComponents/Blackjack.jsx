@@ -68,7 +68,7 @@ export default function Blackjack() {
     const betsRemainingSS = parseInt(window.sessionStorage.getItem("betsRemaining") || "10", 10);
   const [chipCount, setChipCount] = useState(() => {
     if (isLoggedIn) {
-      if (tableChips > 0) {
+      if (tableChips > 0 && !miniGameMarker) {
         return tableChips;
       } else if (miniGameMarker) {
           window.sessionStorage.setItem("isMiniGame", miniGameMarker);
@@ -225,7 +225,7 @@ export default function Blackjack() {
                 return
             }
             window.sessionStorage.setItem("miniGameChipCount", chipCount);
-            if (betsRemainingSS === 9) {
+            if (betsRemainingSS === 1) {
                 sendMiniGame(chipCount, betOutcomes, miniGameMutation)
                 setUserMoney((prev) => prev + chipCount);
                 setTableChips(0)
