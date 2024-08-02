@@ -7,7 +7,7 @@
   background-size: contain; /* Ensure the image fits without stretching */
   background-position: center top; /* Adjust based on your needs */
   background-repeat: no-repeat; /* No repeat */
-  border: 1px solid yellow;
+  /* border: 1px solid yellow; */
 }
 
 .outer-grid {
@@ -20,7 +20,7 @@
   top: 271.1px; /* Adjust based on your needs */
   left: 1037.4px;
   transform: translateX(-50%); 
-  border: 1px solid yellow;
+  /* border: 1px solid yellow; */
 }
 
 .top-row {
@@ -75,7 +75,7 @@
   box-sizing: border-box;
   background-color: transparent; /* Transparent background */
   position: relative;
-  border: 1px solid yellow;
+  /* border: 1px solid yellow; */
   gap: 0px;
 }
 
@@ -105,7 +105,7 @@
   background-position: center top; /* Adjust based on your needs */
   background-repeat: no-repeat; /* No repeat */
   color: rgb(0, 0, 0);
-  font-size: smaller;
+  font-size: x-small;
   font-weight: bold;
   border-radius: 50%;
   width: 35px;

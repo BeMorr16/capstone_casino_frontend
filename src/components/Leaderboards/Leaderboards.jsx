@@ -1,14 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   betLeaderboardRequest,
   moneyLeaderboardRequest,
   recordLeaderboardRequest,
+  minigameLeaderboardRequest,
+  perfectMinigameLeaderboardRequest,
 } from "../Utils/APIRequests";
 import "./leaderboards.css";
 
 export default function Leaderboards() {
   const [activeTab, setActiveTab] = useState("bet");
+
+  // Log when the component is mounted
+  useEffect(() => {
+    console.log("Leaderboards component mounted");
+  }, []);
 
   const {
     data: betLeaderboard,
@@ -16,51 +23,159 @@ export default function Leaderboards() {
     error: errorBetLeaderboard,
   } = useQuery({
     queryKey: ["bet"],
-    queryFn: betLeaderboardRequest
+    queryFn: betLeaderboardRequest,
   });
 
   const {
     data: recordLeaderboard,
-    // isLoading: isLoadingRecordLeaderboard,
+    isLoading: isLoadingRecordLeaderboard,
     error: errorRecordLeaderboard,
   } = useQuery({
     queryKey: ["record"],
-    queryFn: recordLeaderboardRequest
+    queryFn: recordLeaderboardRequest,
   });
 
   const {
     data: moneyLeaderboard,
-    // isLoading: isLoadingMoneyLeaderboard,
+    isLoading: isLoadingMoneyLeaderboard,
     error: errorMoneyLeaderboard,
   } = useQuery({
     queryKey: ["money"],
     queryFn: moneyLeaderboardRequest,
   });
 
+  const {
+    data: minigameLeaderboard,
+    isLoading: isLoadingMinigameLeaderboard,
+    error: errorMinigameLeaderboard,
+  } = useQuery({
+    queryKey: ["minigame"],
+    queryFn: minigameLeaderboardRequest,
+    onSuccess: (data) => {
+      console.log("Minigame Leaderboard Data:", data);
+    },
+    onError: (error) => {
+      console.error("Error fetching minigame leaderboard:", error);
+    },
+  });
+
+  const {
+    data: perfectMinigameLeaderboard,
+    isLoading: isLoadingPerfectMinigameLeaderboard,
+    error: errorPerfectMinigameLeaderboard,
+  } = useQuery({
+    queryKey: ["perfectMinigame"],
+    queryFn: perfectMinigameLeaderboardRequest,
+    onSuccess: (data) => {
+      console.log("Perfect Minigame Leaderboard Data:", data);
+    },
+    onError: (error) => {
+      console.error("Error fetching perfect minigame leaderboard:", error);
+    },
+  });
+
+  // Log data to check if it's being fetched
+  useEffect(() => {
+    if (betLeaderboard) {
+      console.log("Bet Leaderboard Data:", betLeaderboard);
+    }
+    if (recordLeaderboard) {
+      console.log("Record Leaderboard Data:", recordLeaderboard);
+    }
+    if (moneyLeaderboard) {
+      console.log("Money Leaderboard Data:", moneyLeaderboard);
+    }
+    if (minigameLeaderboard) {
+      console.log(
+        "Minigame Leaderboard Data after useEffect:",
+        minigameLeaderboard
+      );
+    }
+    if (perfectMinigameLeaderboard) {
+      console.log(
+        "Perfect Minigame Leaderboard Data after useEffect:",
+        perfectMinigameLeaderboard
+      );
+    }
+  }, [
+    betLeaderboard,
+    recordLeaderboard,
+    moneyLeaderboard,
+    minigameLeaderboard,
+    perfectMinigameLeaderboard,
+  ]);
+
   if (
-    isLoadingBetLeaderboard
+    isLoadingBetLeaderboard ||
+    isLoadingRecordLeaderboard ||
+    isLoadingMoneyLeaderboard ||
+    isLoadingMinigameLeaderboard ||
+    isLoadingPerfectMinigameLeaderboard
   ) {
     return <div>Loading leaderboards...</div>;
   }
 
-  if (errorBetLeaderboard || errorRecordLeaderboard || errorMoneyLeaderboard) {
-    return <div>Error getting leaderboards</div>;
+  if (
+    errorBetLeaderboard ||
+    errorRecordLeaderboard ||
+    errorMoneyLeaderboard ||
+    errorMinigameLeaderboard ||
+    errorPerfectMinigameLeaderboard
+  ) {
+    return (
+      <div>
+        <div>Error getting leaderboards</div>
+        {errorBetLeaderboard && (
+          <div>
+            Error fetching bet leaderboard: {errorBetLeaderboard.message}
+          </div>
+        )}
+        {errorRecordLeaderboard && (
+          <div>
+            Error fetching record leaderboard: {errorRecordLeaderboard.message}
+          </div>
+        )}
+        {errorMoneyLeaderboard && (
+          <div>
+            Error fetching money leaderboard: {errorMoneyLeaderboard.message}
+          </div>
+        )}
+        {errorMinigameLeaderboard && (
+          <div>
+            Error fetching minigame leaderboard:{" "}
+            {errorMinigameLeaderboard.message}
+          </div>
+        )}
+        {errorPerfectMinigameLeaderboard && (
+          <div>
+            Error fetching perfect minigame leaderboard:{" "}
+            {errorPerfectMinigameLeaderboard.message}
+          </div>
+        )}
+      </div>
+    );
   }
 
   const renderBetLeaderboard = (data) => (
     <div className="leaderboard-grid">
       <div className="header" style={{ gridColumn: "1" }}>
-        Game
+        Username
       </div>
       <div className="header" style={{ gridColumn: "2" }}>
+        Game
+      </div>
+      <div className="header" style={{ gridColumn: "3" }}>
         Amount Won
       </div>
       {data.map((item, index) => (
         <React.Fragment key={index}>
           <div className="cell" style={{ gridColumn: "1" }}>
-            {item.game}
+            {item.username}
           </div>
           <div className="cell" style={{ gridColumn: "2" }}>
+            {item.game}
+          </div>
+          <div className="cell" style={{ gridColumn: "3" }}>
             {item.money}
           </div>
         </React.Fragment>
@@ -122,6 +237,67 @@ export default function Leaderboards() {
     </div>
   );
 
+  const renderMinigameLeaderboard = (data) => (
+    <div className="leaderboard-grid">
+      <div className="header" style={{ gridColumn: "1" }}>
+        Username
+      </div>
+      <div className="header" style={{ gridColumn: "2" }}>
+        Game
+      </div>
+      <div className="header" style={{ gridColumn: "3" }}>
+        Amount Won
+      </div>
+      {data.map((item, index) => (
+        <React.Fragment key={index}>
+          <div className="cell" style={{ gridColumn: "1" }}>
+            {item.username}
+          </div>
+          <div className="cell" style={{ gridColumn: "2" }}>
+            {item.game}
+          </div>
+          <div className="cell" style={{ gridColumn: "3" }}>
+            {item.endtotal}
+          </div>
+        </React.Fragment>
+      ))}
+    </div>
+  );
+
+  const renderPerfectMinigameLeaderboard = (data) =>
+    data.length === 0 ? (
+      <div className="leaderboard-grid">
+        <div className="no-data-message">
+          Be The First To Have a Perfect Game!
+        </div>
+      </div>
+    ) : (
+      <div className="leaderboard-grid">
+        <div className="header" style={{ gridColumn: "1" }}>
+          Username
+        </div>
+        <div className="header" style={{ gridColumn: "2" }}>
+          Game
+        </div>
+        <div className="header" style={{ gridColumn: "3" }}>
+          Amount Won
+        </div>
+        {data.map((item, index) => (
+          <React.Fragment key={index}>
+            <div className="cell" style={{ gridColumn: "1" }}>
+              {item.username}
+            </div>
+            <div className="cell" style={{ gridColumn: "2" }}>
+              {item.game}
+            </div>
+            <div className="cell" style={{ gridColumn: "3" }}>
+              {item.endtotal}
+            </div>
+          </React.Fragment>
+        ))}
+      </div>
+    );
+
   const getActiveLeaderboard = () => {
     switch (activeTab) {
       case "bet":
@@ -130,6 +306,10 @@ export default function Leaderboards() {
         return renderRecordLeaderboard(recordLeaderboard);
       case "money":
         return renderMoneyLeaderboard(moneyLeaderboard);
+      case "minigame":
+        return renderMinigameLeaderboard(minigameLeaderboard);
+      case "perfectMinigame":
+        return renderPerfectMinigameLeaderboard(perfectMinigameLeaderboard);
       default:
         return null;
     }
@@ -155,6 +335,20 @@ export default function Leaderboards() {
           onClick={() => setActiveTab("money")}
         >
           Most Money
+        </button>
+        <button
+          className={`tab-button ${activeTab === "minigame" ? "active" : ""}`}
+          onClick={() => setActiveTab("minigame")}
+        >
+          Minigame Winners
+        </button>
+        <button
+          className={`tab-button ${
+            activeTab === "perfectMinigame" ? "active" : ""
+          }`}
+          onClick={() => setActiveTab("perfectMinigame")}
+        >
+          Perfect Minigame
         </button>
       </div>
       <div className="leaderboard">{getActiveLeaderboard()}</div>

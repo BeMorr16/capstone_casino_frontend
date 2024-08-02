@@ -77,7 +77,9 @@ const getCorner = (row, col) => {
   return "Not a Placable Bet";
 };
 
-// Define main functions
+// generates cell meanings so that each cell knows what it is
+// then we can calculate winnings be checking the meaning of the bets
+// allows us to know what multipliers to use for each bet
 const generateCellMeaning = (row, col) => {
   if (col === 0) {
     switch (row) {

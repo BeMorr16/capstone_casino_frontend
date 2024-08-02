@@ -21,9 +21,15 @@ const ChipsSelector = ({
           {value}
         </button>
       ))}
-      <button onClick={onRepeatLastBets}>Repeat Last Bet</button>
-      <button onClick={onUndoLastBet}>Undo Last Bet</button>
-      <button onClick={onClearBets}>Clear Bets</button>{" "}
+      <button className="repeat-btn" onClick={onRepeatLastBets}>
+        Repeat
+      </button>
+      <button className="undo-btn" onClick={onUndoLastBet}>
+        Undo
+      </button>
+      <button className="clear-btn" onClick={onClearBets}>
+        Clear
+      </button>{" "}
     </div>
   );
 };
