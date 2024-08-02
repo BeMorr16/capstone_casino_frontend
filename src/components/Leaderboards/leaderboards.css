@@ -15,19 +15,28 @@
 }
 
 .tabs {
+  max-width:calc(8rem + 23vw);
   display: flex;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
   margin-bottom: 1rem;
-  margin-left: 4vw;
+  margin-top: 3rem;
+  margin-left: 80px;
+  justify-content: center;
 }
 
 .tab-button {
   background-color: rgba(0, 0, 0, 0.5);
   border: none;
   color: white;
-  padding: calc(0.5rem + 0.5vw) calc(1rem + 0.5vw);
+  padding: calc(0.1rem + 0.1vw) calc(1rem + 0.5vw);
   cursor: pointer;
   font-family: 'Patrick Hand', sans-serif;
+  text-align: center;
+  max-height: 80px ;
+  max-width: 200px; /* Optional: set a max width for buttons */
+  font-size: calc(1rem + 0.5vw); /* Adjust font size */
+  flex: 1 1 calc(30% - 1rem); /* Ensure buttons are evenly distributed */
 }
 
 .tab-button.active {
@@ -37,7 +46,6 @@
 .leaderboard {
   background-color: rgba(0, 0, 0, 0);
   padding: calc(1rem + 1vw);
-  /* border-radius: 10px; */
   height: calc(10rem + 14vw);
   width: calc(10rem + 23vw);
   max-width: 80vw;

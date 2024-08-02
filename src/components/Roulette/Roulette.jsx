@@ -22,11 +22,14 @@ import calculateWinningsHelper, {
 
 const Roulette = () => {
   const navigate = useNavigate();
-  const [number, setNumber] = useState(null);
+  const [number, setNumber] = useState(""); // Default to an empty string
   const [placedBets, setPlacedBets] = useState([]);
   const [betHistory, setBetHistory] = useState([]);
   const [lastBets, setLastBets] = useState([]);
-  const [result, setResult] = useState(null);
+  const [result, setResult] = useState(0); // Default to 0
+  const [isSpinning, setIsSpinning] = useState(false);
+  const [totalBet, setTotalBet] = useState(0); // New state for total bet
+
   const [selectedChip, setSelectedChip] = useState(1);
   const [numberHistory, setNumberHistory] = useState([]);
   const [lastNumber, setLastNumber] = useState(0);
@@ -99,6 +102,7 @@ const Roulette = () => {
     setResult(totalWinnings);
     setLastBets(placedBets);
     setPlacedBets([]);
+    setTotalBet(0); // Reset total bet after the game ends
     const win = totalWonAmount > 0;
     const money = win ? totalWonAmount : -totalBetAmount;
     sendRouletteTransaction(
@@ -113,11 +117,15 @@ const Roulette = () => {
       transactionMutation
     );
   };
+
   const handleSpinClick = () => {
+    if (isSpinning) return; // Prevent multiple spins while already spinning
     const randomNumber = getRandomInt(0, 36);
     spinWheel(randomNumber);
+    setIsSpinning(true);
     setTimeout(() => {
       setNumber(randomNumber);
+      setIsSpinning(false);
       handleEndOfGame(randomNumber);
       setNumberHistory((prevHistory) => [
         randomNumber,
@@ -125,6 +133,7 @@ const Roulette = () => {
       ]);
     }, 5000);
   };
+
   const handlePlaceBet = (newBet) => {
     if (chipCount < newBet.amount) {
       alert("You cannot bet more than your current balance.");
@@ -147,7 +156,9 @@ const Roulette = () => {
     });
     setBetHistory((prevHistory) => [...prevHistory, newBet]);
     setChipCount((prevBalance) => prevBalance - newBet.amount);
+    setTotalBet((prevTotal) => prevTotal + newBet.amount); // Update total bet
   };
+
   const handleUndoLastBet = () => {
     if (betHistory.length === 0) return;
     const lastBet = betHistory[betHistory.length - 1];
@@ -168,12 +179,16 @@ const Roulette = () => {
     });
     setChipCount((prevBalance) => prevBalance + lastBet.amount);
     setBetHistory((prevHistory) => prevHistory.slice(0, -1));
+    setTotalBet((prevTotal) => prevTotal - lastBet.amount); // Update total bet
   };
+
   const handleClearBets = () => {
     const totalBets = placedBets.reduce((acc, bet) => acc + bet.amount, 0);
     setChipCount((prevBalance) => prevBalance + totalBets);
     setPlacedBets([]);
+    setTotalBet(0); // Reset total bet
   };
+
   const handleRepeatLastBets = () => {
     const totalLastBets = lastBets.reduce((acc, bet) => acc + bet.amount, 0);
     if (chipCount < totalLastBets) {
@@ -182,24 +197,48 @@ const Roulette = () => {
     }
     setChipCount((prevBalance) => prevBalance - totalLastBets);
     setPlacedBets(lastBets.map((bet) => ({ ...bet })));
+    setTotalBet(totalLastBets); // Update total bet
   };
+
   const handleChipSelect = (chip) => {
     setSelectedChip(chip);
   };
+
   return (
     <div className="roulette-game">
-      <div className="roulette-info">
-        <div className="roulette-info-content">{number !== null && <h2>Winning Number: {number}</h2>}</div>
-        <div className="roulette-info-content">{result !== null && <h2>Total Payout: ${result}</h2>}</div>
-        <div className="roulette-info-content">{chipCount !== null && <h2>Balance: ${chipCount}</h2>}</div>
+      <div className="nav-buttons">
+        <div className="nav-btn" onClick={() => navigate("/blackjack")}>
+          To BlackJack
+        </div>
+        <div className="nav-btn" onClick={() => navigate("/slots")}>
+          To Slots
+        </div>
+        <div className="nav-btn" onClick={() => navigate("/casino")}>
+          Back To Casino
+        </div>
       </div>
+      <div className="roulette-info">
+        <div className="roulette-info-content">
+          <h2>Winning Number: {number}</h2>
+        </div>
+        <div className="roulette-info-content">
+          <h2>Total Payout: ${result}</h2>
+        </div>
+        <div className="roulette-info-content">
+          <h2>Balance: ${chipCount}</h2>
+        </div>
+        <div className="roulette-info-content">
+          <h2>Total Bet: ${totalBet}</h2> {/* Display total bet */}
+        </div>
+      </div>
+
       <div className="board">
         <Board
           selectedChip={selectedChip}
           placeBet={handlePlaceBet}
           placedBets={placedBets}
         />
-         <div className={"roulette-wheel"} onClick={handleSpinClick}>
+        <div className={"roulette-wheel"}>
           <div className={"layer-2 wheel"}></div>
           <div className={"layer-3"}></div>
           <div className={"layer-4 wheel"}></div>
@@ -208,14 +247,20 @@ const Roulette = () => {
             <div className={"ball"}></div>
           </div>
         </div>
-        {/* <NumberHistory history={numberHistory} /> */}
-      </div>
-      <div className="wheel-and-history">
-       
+        <NumberHistory history={numberHistory} />
+        <button
+          className="spin-btn"
+          onClick={handleSpinClick}
+          disabled={isSpinning}
+        >
+          {isSpinning ? "Spinning" : "Spin!"}
+        </button>
       </div>
 
-      <button onClick={handleSpinClick}>Spin the Wheel</button>
+      <div className="wheel-and-history"></div>
+
       <ChipsSelector
+        className="chip-selectors"
         selectedChip={selectedChip}
         onChipSelect={handleChipSelect}
         onRepeatLastBets={handleRepeatLastBets}
@@ -225,4 +270,5 @@ const Roulette = () => {
     </div>
   );
 };
+
 export default Roulette;

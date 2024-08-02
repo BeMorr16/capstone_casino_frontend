@@ -3,7 +3,10 @@
   padding-left: 1rem;
   padding-right: 1rem;
   height: 100vh;
-  background: url("./assets/background-image-3.webp");
+  background: url("./assets/Carpet-2.webp");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
   display: flex;
   flex-direction: column;
   justify-content: center; /* Center content horizontally */
@@ -17,13 +20,13 @@
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  background-color: rgba(37, 49, 85, 0.6);
+  background-color: rgba(27, 83, 35, 0.8);
   border: 1px solid rgba(204, 203, 203, 0.8);
 }
 
 .roulette-info-content {
   width: 20rem;
-  color: white;
+  color: rgb(255, 255, 255);
 }
 
 .roulette-wheel {
@@ -42,22 +45,6 @@
   overflow: visible;
   z-index: 10;
 }
-
-/* @media screen and (max-width: 2640px) {
-  .roulette-wheel {
-    margin: 1em auto;
-  }
-}
-
-@media screen and (max-width: 375px) {
-  body {
-    padding: 0 20px;
-  }
-  .roulette-wheel {
-    float: none;
-    left: 30px;
-  }
-} */
 
 .roulette-wheel .layer-2,
 .roulette-wheel .layer-3,
@@ -122,59 +109,132 @@
 .board {
   display: flex;
   flex-direction: row;
-  border: 10px solid green;
+  /* border: 10px solid green; */
   position: relative;
 }
 
+.spin-btn {
+  position: absolute;
+  margin: 0px 10px;
+  height: 8vh;
+  width: 6vw;
+  border-radius: 5px;
+  background-color: rgb(25, 76, 25);
+  color: white;
+  border: 1px solid white;
+  border-radius: 20px;
+  left: 1190px;
+  top: 80px;
+
+  box-shadow: 2px 2px 1px 4px #f9fffa;
+}
+.spin-btn:active {
+  background-color: rgb(25, 76, 25);
+  color: white;
+  border: 1px solid white;
+  box-shadow: 1px 1px 1px 2px #ffffff;
+  transform: translateX(1px) translateY(1px);
+}
+
+.nav-buttons {
+  
+  display: flex;
+  justify-content: space-around;
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+}
+
+.nav-buttons .nav-btn {
+  padding: 10px 20px;
+  font-family: 'Times New Roman', serif;
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #2C2C2C;
+  border: 3px solid #B8860B;
+  border-radius: 8px;
+  text-shadow: 1px 1px 2px #000;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  position:relative;
+  top: 70px;
+  margin-left: 10px;
+
+  transition: all 0.3s ease;
+}
+
+.nav-buttons .nav-btn:hover {
+  background-color: #2C2C2C;
+  border-color: rgba(255, 174, 55, 0.6);
+  box-shadow: 0 0 15px 5px rgba(255, 174, 55, 0.75);
+  transform: translateY(-5px) scale(1.1)
+}
+
+
+
+
 @media screen and (max-width: 1600px) {
   .board {
-    transform: scale(.9);
+    transform: scale(0.9);
   }
   .roulette-wheel {
-    transform: scale(.9);
-    transform: translateX(20px)
+    transform: scale(0.9);
+    transform: translateX(20px);
   }
-  
 }
 
 @media screen and (max-width: 1400px) {
   .board {
-    transform: scale(0.8);
-    
+    transform: scale(0.9);
   }
   .roulette-wheel {
-    transform: scale(.8) translateX(110px) translateY(-25px);
+    transform: scale(0.8) translateX(110px) translateY(-25px);
     /* transform:  */
   }
-  
 }
 
 @media screen and (max-width: 1200px) {
   .board {
-    transform: scale(0.7);
+    transform: scale(0.9);
   }
   .roulette-wheel {
-    transform: scale(.7) translateX(190px) translateY(-40px);
+    transform: scale(0.7) translateX(190px) translateY(-40px);
   }
-  
+  .number-history {
+    top: 50px;
+  }
+  .spin-btn {
+    top: 130px;
+  }
 }
 
 @media screen and (max-width: 1000px) {
   .board {
-    transform: scale(0.6);
+    transform: scale(0.9);
   }
   .roulette-wheel {
-    transform: scale(.6) translateX(290px) translateY(-65px);
+    transform: scale(0.6) translateX(290px) translateY(-65px);
   }
-  
+  .number-history,
+  .spin-btn {
+    transform: scale(0.7);
+    top: 75px;
+    left: 680px;
+  }
+  .spin-btn {
+    top: 150px;
+    left: 1050px;
+  }
 }
 
 @media screen and (max-width: 800px) {
   .board {
-    transform: scale(0.5);
+    transform: scale(0.9);
   }
   .roulette-wheel {
-    transform: scale(.5) translateX(435px) translateY(-100px);
+    transform: scale(0.5) translateX(435px) translateY(-100px);
   }
-  
 }

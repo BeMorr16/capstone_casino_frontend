@@ -128,3 +128,27 @@ export async function authorizeUserRequest(token) {
     throw error
   }
 }
+
+export const minigameLeaderboardRequest = async () => {
+  try {
+    const { data } = await axios.get(
+      "https://capstone-casino-backend.onrender.com/leaderboard/minigame"
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const perfectMinigameLeaderboardRequest = async () => {
+  try {
+    const { data } = await axios.get(
+      "https://capstone-casino-backend.onrender.com/leaderboard/minigame/perfect"
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

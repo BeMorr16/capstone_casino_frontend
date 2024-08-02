@@ -50,9 +50,7 @@ export default function Layout() {
 <main>
         <Outlet />
         </main>
-          <footer>
-              foot
-          </footer>
+          
     </div>
   )
 }

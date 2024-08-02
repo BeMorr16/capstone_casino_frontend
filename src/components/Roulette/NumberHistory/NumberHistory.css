@@ -1,11 +1,15 @@
+/* NumberHistory.css */
 .number-history {
   border: 1px solid #ccc;
   padding: 10px;
   margin-top: 5rem;
-  width: 8rem; 
-  height: 38rem;
-  background-color: rgb(37, 49, 85, 0.6);
+  width: 30%;
+  height: auto;
+  background-color: rgba(39, 81, 34, 0.8);
   color: white;
+  position: absolute;
+  left: 740px;
+  border-radius: 30px;
 }
 
 .number-history h3 {
@@ -16,25 +20,19 @@
 
 .history-list {
   display: flex;
-  justify-content: space-between;
-}
-
-.history-column {
-  display: flex;
-  flex-direction: column-reverse;
+  justify-content: center;
   align-items: center;
-  height: 34rem;
-  overflow: hidden; 
+  overflow-x: auto;
 }
 
 .history-item {
   width: 30px;
   height: 30px;
-  margin: 2px 0;
+  margin: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0%;
+  border-radius: 50%;
   border: 1px solid #fdfdfd;
 }
 
@@ -46,10 +44,4 @@
 .history-item.black {
   background-color: #444;
   color: white;
-
-}
-
-.history-item.blank {
-  background-color: transparent;
-  border: none;
 }
