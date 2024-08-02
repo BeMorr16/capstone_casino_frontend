@@ -15,6 +15,9 @@ nav.nav {
   text-align: center;
 }
 
+.nav-user-info{
+  color: #f0e68c;
+}
 
 .nav-links {
   display: flex;
@@ -48,6 +51,7 @@ nav.nav {
   .dropdown {
     position: relative;
     display: inline-block;
+    z-index: 1000;
   }
   
   .dropbtn {
@@ -80,6 +84,7 @@ nav.nav {
     display: block;
     font-size: 18px;
     transition: color 0.3s, background-color 0.3s;
+    z-index: 1000;
   }
   
   .dropdown-content a:hover {

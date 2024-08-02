@@ -251,19 +251,19 @@ const SlotMachine = () => {
       {/* <div>
     <button onClick={() => addMoreChips(100)}>Add 100 Chips</button>
   </div> */}
-          <div>
+          <div className="SLTM-buttons-container">
           {/* Other components */}
-          <button 
-            className="SLTMtoCasinoFloorButton" 
-            onClick={() => navigate('/casino')}
-          >
-            Back to Casino Floor
-          </button>
           <button 
             className="SLTMtoBlackJackButton" 
             onClick={() => navigate('/blackjack')}
           >
             To BlackJack
+          </button>
+          <button 
+            className="SLTMtoCasinoFloorButton" 
+            onClick={() => navigate('/casino')}
+          >
+            Back to Casino Floor
           </button>
           <button 
             className="SLTMtoRouletteButton" 
@@ -272,7 +272,6 @@ const SlotMachine = () => {
             To Roulette
           </button>
         </div>
-        
  <div className="SLTM-Blankspace"></div>
       <div className="SLTM-MainContainer">
         <div className="SLTM-slot-machine-container">
