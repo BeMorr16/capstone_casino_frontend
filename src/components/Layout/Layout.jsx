@@ -1,10 +1,11 @@
 // import React from 'react'
-import { Outlet, Link } from 'react-router-dom'
+import { Outlet, Link, useNavigate } from 'react-router-dom'
 import "./layout.css"
 import useUserState from '../../store/store'
 
 export default function Layout() {
-  const { returnChipsToTotal, isLoggedIn, resetUser,  username, userMoney } = useUserState();
+  const { returnChipsToTotal, isLoggedIn, resetUser, username, userMoney, setIsMiniGame } = useUserState();
+  const navigate = useNavigate();
 
   function resetTableChips() {
     returnChipsToTotal();
@@ -14,6 +15,13 @@ export default function Layout() {
     resetUser();
     window.sessionStorage.removeItem("token");
   }
+
+  function sendToMiniGame(e) {
+    e.preventDefault();
+    setIsMiniGame(true);
+    navigate('/blackjack')
+  }
+
 
   return (
       <div className='Layout'>
@@ -48,6 +56,7 @@ export default function Layout() {
 
           <Link to='/leaderboards' onClick={resetTableChips}>Leaderboards</Link>
           <Link to='/casino' onClick={resetTableChips}>Casino</Link>
+          {isLoggedIn && <Link onClick={sendToMiniGame}>MiniGame</Link>}
           {isLoggedIn ? (<Link to='/' onClick={handleLogout}>Logout</Link>) : (<Link to='/account' onClick={resetTableChips}> Login</Link>)}
 
         </div>  
@@ -56,9 +65,6 @@ export default function Layout() {
 <main>
         <Outlet />
         </main>
-          <footer>
-              foot
-          </footer>
     </div>
   )
 }

@@ -47,11 +47,12 @@ export function handleInsurance(insuranceRef, setShowInsuranceResult, handleDeal
   
   export function handleSubmit(e, setIsDealersTurn, setIsHandComplete, setLockedBet, betAmount, setChipCount, randomizedDecks,
     setPlayersCards, setDealersCards, setRandomizedDecks, setBetAmount, setIsBlackjack, dealersCardsRef, deckRef,
-    handleEndOfGame, playerCountRef, playerCardsRef, setSideBetResult, setLockedSideBet, sideBetAmount, setSideBetAmount) {
+    handleEndOfGame, playerCountRef, playerCardsRef, setSideBetResult, setLockedSideBet, sideBetAmount, setSideBetAmount, setPreviousBet) {
     e.preventDefault();
     setIsDealersTurn(false);
     setIsHandComplete(false);
     setLockedBet(betAmount);
+    setPreviousBet(betAmount);
     setChipCount((prev) => prev - betAmount - sideBetAmount);
       setBetAmount(() => 0);
     const drawnUserCards = randomizedDecks.slice(0, 2);

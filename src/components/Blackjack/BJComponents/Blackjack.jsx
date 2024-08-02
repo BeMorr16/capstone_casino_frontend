@@ -25,7 +25,6 @@ export default function Blackjack() {
     isHandComplete,
     winner,
     setRandomizedDecks,
-    setPreviousBet,
     setDealersCards,
     setIsBlackjack,
     setWinner,
@@ -42,7 +41,6 @@ export default function Blackjack() {
     isHandComplete: state.isHandComplete,
     winner: state.winner,
     setRandomizedDecks: state.setRandomizedDecks,
-    setPreviousBet: state.setPreviousBet,
     setDealersCards: state.setDealersCards,
     setIsBlackjack: state.setIsBlackjack,
     setWinner: state.setWinner,
@@ -85,7 +83,8 @@ export default function Blackjack() {
     const [sideBetAmount, setSideBetAmount] = useState(0);
     const [lockedSideBet, setLockedSideBet] = useState(0);
     const [sideBetResult, setSideBetResult] = useState(0);
-    const [showInsuranceResult, setShowInsuranceResult] = useState(false);
+  const [showInsuranceResult, setShowInsuranceResult] = useState(false);
+  
     useEffect(() => {
         if (isLoggedIn && tableChips === 0 && !isMiniGame) {
             navigate("/casino");
@@ -150,7 +149,6 @@ export default function Blackjack() {
         if (isMiniGame) setBetOutcomes((prevOutcomes) => [...prevOutcomes, false ]);
         setWinner("Dealer 21! Insurance wins");
         setShowWinner(true);
-        setPreviousBet(lockedBet);
         setTimeout(() => {
             setShowWinner(false);
         }, 1500);
@@ -251,7 +249,6 @@ export default function Blackjack() {
             window.sessionStorage.setItem("betsRemaining", betsRemain - 1);
         }
     setShowWinner(true);
-    setPreviousBet(lockedBet);
     setTimeout(() => {
       setShowWinner(false);
     }, 1500);
@@ -283,11 +280,11 @@ export default function Blackjack() {
                               playerCountRef={playerCountRef} deckRef={deckRef} handleDealersTurn={handleDealersTurn}
                               handleEndOfGame={handleEndOfGame} dealersCardsRef={dealersCardsRef} insuranceRef={insuranceRef} setShowInsuranceResult={setShowInsuranceResult} /> )}
           </div>
+          <BJUserBetControls chipCount={chipCount} setChipCount={setChipCount} dealersCardsRef={dealersCardsRef}
+            deckRef={deckRef} handleEndOfGame={handleEndOfGame} playerCountRef={playerCountRef}
+            playerCardsRef={playerCardsRef} setSideBetResult={setSideBetResult} setLockedSideBet={setLockedSideBet} sideBetAmount={sideBetAmount} setSideBetAmount={setSideBetAmount}/>
         </div>
-              <BJUserBetControls chipCount={chipCount} setChipCount={setChipCount} dealersCardsRef={dealersCardsRef}
-                  deckRef={deckRef} handleEndOfGame={handleEndOfGame} playerCountRef={playerCountRef}
-                  playerCardsRef={playerCardsRef} setSideBetResult={setSideBetResult} setLockedSideBet={setLockedSideBet} sideBetAmount={sideBetAmount} setSideBetAmount={setSideBetAmount} />
-        {winner && (
+        {winner && isHandComplete && (
           <div className="BJPreviousBetContainer">
           <h2 className="BJPreviousBetHeader">Previous Bet:</h2>
           <div className="BJPreviousBetContent">
@@ -296,7 +293,7 @@ export default function Blackjack() {
           </div>
         </div>
               )}
-              {winner && (lockedSideBet > 0 || insuranceRef.current) && (
+              {winner && (lockedSideBet > 0 || insuranceRef.current) && isHandComplete && (
                    <div className="BJSideBetContainer">
                    <h2 className="BJSideBetHeader">Side Bets:</h2>
                    <div className="BJSideBetContent">

@@ -1,47 +1,40 @@
 import { Link, useNavigate } from "react-router-dom"
-import useUserState from "../../store/store";
 import './home.css'
 // import React from 'react'
 
 export default function Home() {
   const navigate = useNavigate();
-  const {setIsMiniGame} = useUserState();
 
-  // console.log(id, userMoney);
-  
-  function sendToMiniGame() {
-    setIsMiniGame(true);
-    navigate('/blackjack')
-}
 
   return (
     <>
       <div className="landing-page">
       <header className="welcome-section">
-        <h1>Welcome to the Ultimate Online Casino Experience!</h1>
+          <h1>Welcome to Wise Guys Casino</h1>
+          <h2>The Ultimate Online Gambling Experience!</h2>
         <p>
-        Dive into a world of excitement and chance with our online casino, featuring Blackjack, Roulette, and Slot Machines. Whether you’re a seasoned gambler or a curious newcomer, we have something for everyone. Visit our how to play pages &#40;<Link to="/howtoplay/blackjack">Blackjack</Link>, <Link to="/howtoplay/roulette">Roulette</Link>, <Link to="/howtoplay/slots">Slots</Link>&#41;  for all the guidance you need to get started.
+        Dive into a world of excitement and chance with our online casino, featuring Blackjack, Roulette, and Slot Machines. Whether you’re a seasoned gambler or a curious newcomer, we have something for everyone. Visit our how to play pages &#40;<Link className="home-links" to="/howtoplay/blackjack">Blackjack</Link>, <Link className="home-links" to="/howtoplay/roulette">Roulette</Link>, <Link className="home-links" to="/howtoplay/slots">Slots</Link>&#41;  for all the guidance you need to get started.
         </p>
       </header>
       
       <section className="guest-access">
         <h2>Guest Access</h2>
         <p>
-          As a guest, you have the freedom to play with an unlimited amount of money. Your funds reset each time you enter a game or refresh the page, giving you endless opportunities to refine your strategy.
+          As a guest, you have the freedom to play with an unlimited amount of money to test your skills and strategies. Your funds reset each time you enter a game or refresh the page, giving you endless opportunities to refine your strategy.
         </p>
       </section>
       
       <section className="registered-user-benefits">
         <h2>Registered User Benefits</h2>
         <p>
-          Create an account to unlock the full potential of our casino. Logged-in users can save and track their progress, with their chip count and money increasing as they play.
+          Create an account to unlock the full potential of our casino. Logged-in users can save and track their progress, with their chip count and record being saved for the next time they log on. Build your fortune now!
         </p>
       </section>
       
       <section className="account-info-stats">
         <h2>Account Information and Advanced Stats</h2>
         <p>
-          Your account page offers a comprehensive view of your gaming journey, allowing you to edit your details, analyze advanced stats for each game, and search and filter your bet slips or transaction history.
+          Your cashier page offers a comprehensive view of your gaming journey, allowing you to edit your details, analyze advanced stats for each game, and search and filter your bet slips/transaction history.
         </p>
       </section>
       
@@ -55,17 +48,16 @@ export default function Home() {
       <section className="blackjack-mini-game">
         <h2>Blackjack Mini-Game</h2>
         <p>
-          One of the fantastic features of our casino is the Blackjack mini-game. Logged-in users can embark on this challenge with $100 and 10 hands to maximize their winnings. Track your mini-game performance on your account page and see how you rank on the leaderboard.
+          One of the fantastic features of our casino is the Blackjack mini-game. Logged-in users can embark on this challenge with $100 and 10 hands to maximize their winnings. Track your mini-game performance on your cashier page and see how you rank on the leaderboard. Aim for the perfect game of 10 straight wins and earn your place in the hall of fame.
         </p>
       </section>
       
-        <p>
+        <p className="home-end-section">
           Join us now to experience the excitement and competition our casino has to offer. Whether you choose to play as a guest or a registered user, the adventure awaits.
         </p>
         <div className="cta-buttons">
-        <button onClick={() => navigate('/account')}>Login to start your journey</button>
-          <button onClick={() => navigate('/casino')}>Gamble as a guest</button>
-          <button onClick={sendToMiniGame}>MiniGame</button>
+        <button className="cta-button" onClick={() => navigate('/account')}>Login</button>
+          <button className="cta-button" onClick={() => navigate('/casino')}>Guest</button>
         </div>
     </div>
     </>

@@ -5,9 +5,6 @@ import UserInfo from "./UserInfo";
 import UserStats from './UserStats';
 
 
-
-
-//getUSerInfo Request(In utils)
 export default function Cashier() {
 
   return (

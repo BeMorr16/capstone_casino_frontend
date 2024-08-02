@@ -3,8 +3,8 @@ import useStore from "../BJstore/BJstore"
 import { handleSubmit } from "../BJutils/BJgameUtils";
 import BJButton from "./BJButton"
 
-export default function BJUserBetControls({ chipCount, setChipCount, dealersCardsRef, deckRef, handleEndOfGame, playerCountRef, playerCardsRef, setSideBetResult, setLockedSideBet, sideBetAmount, setSideBetAmount}) {
-    const { setBetAmount, previousBet, betAmount, isHandComplete, setIsDealersTurn, setIsHandComplete, setLockedBet, randomizedDecks, setPlayersCards, setDealersCards, setRandomizedDecks, setIsBlackjack, lockedBet } = useStore((state) => ({
+export default function BJUserBetControls({ chipCount, setChipCount, dealersCardsRef, deckRef, handleEndOfGame, playerCountRef, playerCardsRef, setSideBetResult, setLockedSideBet, sideBetAmount, setSideBetAmount, }) {
+    const { setBetAmount, previousBet, betAmount, isHandComplete, setIsDealersTurn, setIsHandComplete, setLockedBet, randomizedDecks, setPlayersCards, setDealersCards, setRandomizedDecks, setIsBlackjack, lockedBet, setPreviousBet } = useStore((state) => ({
         setBetAmount: state.setBetAmount,
         previousBet: state.previousBet,
         betAmount: state.betAmount,
@@ -17,7 +17,8 @@ export default function BJUserBetControls({ chipCount, setChipCount, dealersCard
         setDealersCards: state.setDealersCards,
         setRandomizedDecks: state.setRandomizedDecks,
       setIsBlackjack: state.setIsBlackjack,
-      lockedBet: state.lockedBet
+      lockedBet: state.lockedBet,
+      setPreviousBet: state.setPreviousBet,
     }));
   return (
     <div className="blackjackUserControls">
@@ -39,7 +40,7 @@ export default function BJUserBetControls({ chipCount, setChipCount, dealersCard
           </div>
           <form onSubmit={(e)=>  handleSubmit(e, setIsDealersTurn, setIsHandComplete, setLockedBet, betAmount, setChipCount, randomizedDecks,
                 setPlayersCards, setDealersCards, setRandomizedDecks, setBetAmount, setIsBlackjack, dealersCardsRef, deckRef,
-                handleEndOfGame, playerCountRef, playerCardsRef, setSideBetResult, setLockedSideBet, sideBetAmount, setSideBetAmount)}>
+                handleEndOfGame, playerCountRef, playerCardsRef, setSideBetResult, setLockedSideBet, sideBetAmount, setSideBetAmount, setPreviousBet)}>
             <div className="betControls">
               <button disabled={!isHandComplete || previousBet < 1 || previousBet > chipCount}
                 onClick={() => setBetAmount(() => previousBet)}>
