@@ -20,6 +20,7 @@ export default function UserHistory() {
     const headers = ['#', 'Game', 'Win/Loss', 'Money $', 'Result', 'Placed At'];
     return (
       <div className="bet-table">
+             <h2 className = "User-History-h2">User History</h2>
         <div className="filters">
           <div className="filter-group">
             <label htmlFor="game-select">Game:</label>

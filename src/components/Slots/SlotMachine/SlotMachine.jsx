@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Slots from "../Slots/Slots";
 import coinSound from "../assets/sounds/coin.mp3";
 import loseSound from "../assets/sounds/lose.mp3";
@@ -15,7 +15,7 @@ import "./SlotMachine.css";
 
 //Variables
 const SlotMachine = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [reels, setReels] = useState([Slots[0], Slots[0], Slots[0]]);
   const [spin, setSpin] = useState(false);
   const [message, setMessage] = useState("Lets Spin!!");
@@ -28,7 +28,26 @@ const SlotMachine = () => {
   const winAudio = new Audio(winSound);
   const loseAudio = new Audio(loseSound);
   const coinAudio = new Audio(coinSound);
-  const { id } = useUserState();
+  const { id, isLoggedIn, tableChips, userMoney, adjustTableChips } =
+    useUserState();
+
+  const [chipCount, setChipCount] = useState(() => {
+    if (isLoggedIn) {
+      if (tableChips > 0) {
+        return tableChips;
+      } else if (tableChips === 0) {
+        navigate("/casino");
+        return 0;
+      }
+    }
+    return 1000;
+  });
+
+  useEffect(() => {
+    if (isLoggedIn && tableChips === 0) {
+      navigate("/casino");
+    }
+  }, [isLoggedIn, tableChips, navigate]);
 
   //Sounds configuration
   const toggleAudio = () => {
@@ -195,7 +214,6 @@ const SlotMachine = () => {
     let chipCountToSend;
     if (win_loss) {
       chipCountToSend = winAmount;
-      // } else if {
     } else {
       chipCountToSend = betAmount * -1;
     }
@@ -206,7 +224,6 @@ const SlotMachine = () => {
     } else {
       result = currentReels;
     }
-    
 
     const transaction = {
       id: id,
@@ -221,58 +238,31 @@ const SlotMachine = () => {
     console.log("Win Amount:", winAmount);
   };
 
-  const { tableChips, isLoggedIn, userMoney, adjustTableChips, } = useUserState();
-  const [chipCount, setChipCount] = useState(() => {
-    if (isLoggedIn) {
-      if (tableChips > 0) {
-        return tableChips;
-      } else if (tableChips === 0) {
-        navigate('/casino');
-        return 0;
-      }
-    }
-    return 1000;
-  });
-  
   console.log(userMoney, tableChips);
-  
-  // const addMoreChips = (amount) => {
-  //   if (userMoney >= amount) {
-  //     adjustTableChips(amount);
-  //     setChipCount(chipCount + amount);
-  //   } else {
-  //     console.error('Not enough money');
-  //   }
-  // };
-
 
   return (
     <div className="SLTM-slot-machine-background">
-      {/* <div>
-    <button onClick={() => addMoreChips(100)}>Add 100 Chips</button>
-  </div> */}
-          <div className="SLTM-buttons-container">
-          {/* Other components */}
-          <button 
-            className="SLTMtoBlackJackButton" 
-            onClick={() => navigate('/blackjack')}
-          >
-            To BlackJack
-          </button>
-          <button 
-            className="SLTMtoCasinoFloorButton" 
-            onClick={() => navigate('/casino')}
-          >
-            Back to Casino Floor
-          </button>
-          <button 
-            className="SLTMtoRouletteButton" 
-            onClick={() => navigate('/roulette')}
-          >
-            To Roulette
-          </button>
-        </div>
- <div className="SLTM-Blankspace"></div>
+      <div className="SLTM-buttons-container">
+        <button
+          className="SLTMtoBlackJackButton"
+          onClick={() => navigate("/blackjack")}
+        >
+          To BlackJack
+        </button>
+        <button
+          className="SLTMtoCasinoFloorButton"
+          onClick={() => navigate("/casino")}
+        >
+          Back to Casino Floor
+        </button>
+        <button
+          className="SLTMtoRouletteButton"
+          onClick={() => navigate("/roulette")}
+        >
+          To Roulette
+        </button>
+      </div>
+      <div className="SLTM-Blankspace"></div>
       <div className="SLTM-MainContainer">
         <div className="SLTM-slot-machine-container">
           <div

@@ -2,7 +2,7 @@
 
 .Layout {
   display: flex;
-  flex-direction: column; /* Stack children vertically */
+  flex-direction: column; 
   min-height: 100vh;
   margin: 0;
   
@@ -38,14 +38,16 @@ nav.nav {
 }
 
 .nav-links a:hover{
-  color: #ffffff;
+    color: #ffffff;
+    background-color: #2c2c2c;
+    text-shadow: 0 0 15px rgba(255, 174, 55, 0.75), 0 0 5px rgba(255, 174, 55, 0.6);
   z-index: 1000000;
 }
 
 
   main {
-    flex: 1; /* Takes up remaining space */
-    width: 100%; /* Full width */
+    flex: 1; 
+    width: 100%; 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -69,8 +71,9 @@ nav.nav {
   }
 
   .dropbtn:hover {
-    color: #fff;
-    border-radius: 5px;
+    color: #ffffff;
+    background-color: #2c2c2c;
+    text-shadow: 0 0 15px rgba(255, 174, 55, 0.75), 0 0 5px rgba(255, 174, 55, 0.6);
   }
   
   .dropdown-content {
@@ -92,10 +95,6 @@ nav.nav {
     z-index: 1000;
   }
   
-  .dropdown-content a:hover {
-    background-color: #b8860b;
-    color: #fff;
-  }
   
   .dropdown:hover .dropdown-content {
     display: block;
@@ -103,8 +102,8 @@ nav.nav {
   
   
   footer {
-    background-color: gray; /* Change to your desired color */
-    text-align: center; /* Center text */
-    padding: 10px; /* Padding around footer */
-    width: 100%; /* Full width */
+    background-color: gray; 
+    text-align: center; 
+    padding: 10px; 
+    width: 100%; 
   }

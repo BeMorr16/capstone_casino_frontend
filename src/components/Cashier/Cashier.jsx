@@ -9,6 +9,7 @@ export default function Cashier() {
 
   return (
     <>
+    <div className="Cashier-Background">
       <div className='BankContainer'>
         <div className='bank-top-section'>
           
@@ -17,6 +18,7 @@ export default function Cashier() {
 </div>
         <UserHistory />
         
+      </div>
       </div>
     </>
   )

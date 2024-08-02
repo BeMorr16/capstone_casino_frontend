@@ -94,13 +94,13 @@
 
 .BJ-inst1::-webkit-scrollbar-thumb,
 .BJ-inst2::-webkit-scrollbar-thumb {
-  background-color: rgba(251, 237, 158, 0.8); /* Gold color */
+  background-color: rgba(251, 237, 158, 0.8); 
   border-radius: 10px;
 }
 
 .BJ-inst1::-webkit-scrollbar-thumb:hover,
 .BJ-inst2::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(189, 127, 50, 1); /* Brighten on hover */
+  background-color: rgba(189, 127, 50, 1); 
   border-color: rgba(255, 174, 55, 0.600);
   box-shadow: 0 1px 15px 5px rgba(255, 174, 55, 0.75);
 }
